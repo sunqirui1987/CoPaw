@@ -6,15 +6,13 @@ import type { SiteConfig } from "../config";
 import { t, type Lang } from "../i18n";
 
 const COMMANDS = {
-  pip: ["pip install copaw", "copaw init --defaults", "copaw app"],
+  pip: ["pip install copaw", "copaw app"],
   unix: [
     "curl -fsSL https://copaw.agentscope.io/install.sh | bash",
-    "copaw init --defaults",
     "copaw app",
   ],
   windows: [
     "irm https://copaw.agentscope.io/install.ps1 | iex",
-    "copaw init --defaults",
     "copaw app",
   ],
 } as const;

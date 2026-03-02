@@ -1,13 +1,18 @@
+import { useState } from "react";
 import { useAgentsData, FileListPanel, FileEditor } from "./components";
 import styles from "./index.module.less";
-import { UploadOutlined, DownloadOutlined } from "@ant-design/icons";
-import { Button, Tooltip, message } from "@agentscope-ai/design";
+import { UploadOutlined, DownloadOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Tooltip, message, Modal, Radio } from "@agentscope-ai/design";
 import { workspaceApi } from "../../../api/modules/workspace";
+import api from "../../../api";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function WorkspacePage() {
   const { t } = useTranslation();
+  const [installModalOpen, setInstallModalOpen] = useState(false);
+  const [installLanguage, setInstallLanguage] = useState<"zh" | "en">("zh");
+  const [installing, setInstalling] = useState(false);
   const {
     files,
     selectedFile,
@@ -99,6 +104,30 @@ export default function WorkspacePage() {
     fileInputRef.current?.click();
   };
 
+  const handleInstallTemplates = async () => {
+    setInstalling(true);
+    try {
+      const result = await api.installMdTemplates(installLanguage);
+      message.success(
+        result.copied.length > 0
+          ? t("workspace.installTemplatesSuccess", {
+              count: result.copied.length,
+            })
+          : t("workspace.installTemplatesAlreadyPresent"),
+      );
+      setInstallModalOpen(false);
+      fetchFiles();
+    } catch (err) {
+      message.error(
+        t("workspace.installTemplatesFailed") +
+          ": " +
+          (err instanceof Error ? err.message : String(err)),
+      );
+    } finally {
+      setInstalling(false);
+    }
+  };
+
   return (
     <div className={styles.agentsPage}>
       <div className={styles.header}>
@@ -112,6 +141,13 @@ export default function WorkspacePage() {
                 : t("common.loading"))}
           </p>
           <div className={styles.actionButtons}>
+            <Button
+              size="small"
+              onClick={() => setInstallModalOpen(true)}
+              icon={<PlusOutlined />}
+            >
+              {t("workspace.installTemplates")}
+            </Button>
             <Tooltip
               title={t("workspace.uploadTooltip")}
               placement="top"
@@ -160,6 +196,27 @@ export default function WorkspacePage() {
       </div>
 
       <p className={styles.attribution}>{t("workspace.attribution")}</p>
+
+      <Modal
+        title={t("workspace.installTemplatesTitle")}
+        open={installModalOpen}
+        onCancel={() => setInstallModalOpen(false)}
+        onOk={handleInstallTemplates}
+        confirmLoading={installing}
+        okText={t("common.confirm")}
+        cancelText={t("common.cancel")}
+      >
+        <p style={{ marginBottom: 16 }}>
+          {t("workspace.installTemplatesDesc")}
+        </p>
+        <Radio.Group
+          value={installLanguage}
+          onChange={(e) => setInstallLanguage(e.target.value)}
+        >
+          <Radio value="zh">{t("generalConfig.languageZh")}</Radio>
+          <Radio value="en">{t("generalConfig.languageEn")}</Radio>
+        </Radio.Group>
+      </Modal>
 
       {/* Hidden file input - only accepts .zip files up to 100MB */}
       <input

@@ -40,6 +40,34 @@ CoPaw 由 [AgentScope 团队](https://github.com/agentscope-ai) 基于
 
 ---
 
+## 能力全景
+
+CoPaw 的能力由以下模块组成：
+
+```mermaid
+graph LR
+    User[用户] --> Channels[频道]
+    Channels --> Agent[Agent]
+    Agent --> Tools[内置工具]
+    Agent --> Skills[Skills]
+    Agent --> MCP[MCP]
+    Agent --> Memory[记忆]
+    Tools --> Files[文件]
+    Tools --> Shell[Shell]
+    Tools --> Browser[浏览器]
+```
+
+| 模块       | 说明                                                                 |
+| ---------- | -------------------------------------------------------------------- |
+| **频道**   | 钉钉、飞书、QQ、Discord、iMessage、Console；[频道配置](./channels)   |
+| **内置工具** | 文件 I/O、Shell、代码执行、搜索、浏览器、记忆检索等；[内置工具参考](./tools) |
+| **Skills** | PDF、Word、Excel、PPT、新闻、邮件、定时任务等；[Skills](./skills)     |
+| **MCP**    | 连接外部 MCP 服务器扩展工具；[MCP](./mcp)                             |
+| **记忆**   | 上下文压缩、长期记忆、语义检索；[记忆](./memory)                     |
+| **模型**   | 云模型（DashScope、ModelScope、七牛 MaaS、阿里云 Coding Plan）或本地模型（llama.cpp、MLX、Ollama）；[本地模型](./local-models) |
+
+---
+
 ## 文档中会出现的几个概念
 
 - **频道** — 你和 CoPaw 对话的「场所」（钉钉、飞书、QQ、Discord、iMessage 等）。在
@@ -62,4 +90,7 @@ CoPaw 由 [AgentScope 团队](https://github.com/agentscope-ai) 基于
    - [心跳](./heartbeat) — 配置定时自检或摘要（可选）；
    - [CLI](./cli) — 初始化、定时任务、清空工作目录等命令；
    - [Skills](./skills) — 了解与扩展 CoPaw 能力；
-   - [配置与工作目录](./config) — 工作目录与配置文件说明。
+   - [配置与工作目录](./config) — 工作目录与配置文件说明；
+   - [Agent Prompt 文件](./agent_md_intro) — 自定义 Agent 人设与行为；
+   - [本地模型](./local-models) — 无 API Key 本地运行；
+   - [部署指南](./deployment) — 生产环境部署建议。

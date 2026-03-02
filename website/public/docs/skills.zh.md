@@ -30,6 +30,20 @@
 | **xlsx**                     | 表格（.xlsx、.xlsm、.csv、.tsv）的读取、编辑、创建与格式整理，支持公式与数据分析。                                                          | https://github.com/anthropics/skills/tree/main/skills/xlsx     |
 | **browser_visible**          | 以可见模式（headed）启动真实浏览器窗口，适用于演示、调试或需要人工参与（如登录、验证码）的场景。                                            | 自建                                                           |
 
+### 依赖与环境变量
+
+| Skill     | 依赖                         | 环境变量示例                         |
+| --------- | ---------------------------- | ------------------------------------ |
+| **pdf**   | `pypdf`、`pdf2image` 等      | 无                                   |
+| **docx**  | `python-docx`                | 无                                   |
+| **pptx**  | `python-pptx`                | 无                                   |
+| **xlsx**  | `openpyxl`、`pandas`、可选 LibreOffice | 无                         |
+| **news**  | 网络请求                     | 无                                   |
+| **himalaya** | 需安装 `himalaya` CLI      | `IMAP_*`、`SMTP_*` 等邮件配置        |
+| **browser_visible** | `playwright`             | 无                                   |
+
+部分 Skills（如网页搜索）需在 [设置 → 环境变量](./console) 中配置 `TAVILY_API_KEY` 等第三方 API Key。
+
 ---
 
 ## 通过控制台管理 Skills

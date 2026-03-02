@@ -149,7 +149,7 @@ prepare_console() {
         return
     fi
 
-    # Copy pre-built assets if available (e.g. developer already ran npm build)
+    # Copy pre-built assets if available (e.g. developer already ran pnpm build)
     if [ -d "$console_src" ] && [ -f "$console_src/index.html" ]; then
         info "Copying console frontend assets..."
         mkdir -p "$console_dest"
@@ -159,21 +159,34 @@ prepare_console() {
         return
     fi
 
-    # Try to build if npm is available
+    # Try to build if pnpm is available
     if [ ! -f "$repo_dir/console/package.json" ]; then
         warn "Console source not found — the web UI won't be available."
         return
     fi
 
-    if ! command -v npm &>/dev/null; then
-        warn "npm not found — skipping console frontend build."
-        warn "Install Node.js from https://nodejs.org/ then re-run this installer,"
-        warn "or run 'cd console && npm ci && npm run build' manually."
+    if ! command -v pnpm &>/dev/null; then
+        if command -v corepack &>/dev/null; then
+            info "Enabling pnpm via corepack..."
+            corepack enable 2>/dev/null || true
+            corepack prepare pnpm@latest --activate 2>/dev/null || true
+        fi
+    fi
+    if ! command -v pnpm &>/dev/null; then
+        if command -v npm &>/dev/null; then
+            info "Installing pnpm..."
+            npm install -g pnpm 2>/dev/null || true
+        fi
+    fi
+    if ! command -v pnpm &>/dev/null; then
+        warn "pnpm not found — skipping console frontend build."
+        warn "Install Node.js from https://nodejs.org/ then run: corepack enable && corepack prepare pnpm@latest --activate"
+        warn "or run 'cd console && pnpm install && pnpm run build' manually."
         return
     fi
 
-    info "Building console frontend (npm ci && npm run build)..."
-    (cd "$repo_dir/console" && npm ci && npm run build)
+    info "Building console frontend (pnpm install && pnpm run build)..."
+    (cd "$repo_dir/console" && pnpm install && pnpm run build)
     if [ -f "$console_src/index.html" ]; then
         mkdir -p "$console_dest"
         cp -R "$console_src/"* "$console_dest/"
@@ -313,8 +326,8 @@ fi
 
 echo "Then run:"
 echo ""
-printf "  ${BOLD}copaw init${RESET}       # first-time setup\n"
-printf "  ${BOLD}copaw app${RESET}        # start CoPaw\n"
+printf "  ${BOLD}copaw app${RESET}        # start CoPaw (configure in browser)\n"
+printf "  ${BOLD}copaw init${RESET}       # optional: interactive setup\n"
 echo ""
 printf "To upgrade later, re-run this installer.\n"
 printf "To uninstall, run: ${BOLD}copaw uninstall${RESET}\n"

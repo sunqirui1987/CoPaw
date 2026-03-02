@@ -70,19 +70,13 @@ docker run -p 8088:8088 -v copaw-data:/app/working agentscope/copaw:latest
 
 ### CoPaw服务如何启动及初始化
 
-推荐使用默认配置快速初始化：
-
-```bash
-copaw init --defaults
-```
-
-启动服务命令：
+安装后直接启动服务：
 
 ```bash
 copaw app
 ```
 
-控制台默认地址为 `http://127.0.0.1:8088/`，使用默认配置快速初始化后，可以进入控制台快捷自定义相关内容。详情请见[快速开始](https://copaw.agentscope.io/docs/quickstart)。
+控制台默认地址为 `http://127.0.0.1:8088/`。**API Key、模型、频道等配置均可在此完成**，无需预先执行 `copaw init`。可选：运行 `copaw init` 可进行交互式初始化。详情请见[快速开始](https://copaw.agentscope.io/docs/quickstart)。
 
 ### 开源地址
 

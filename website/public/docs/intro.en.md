@@ -45,7 +45,35 @@ what it actually does depends on which Skills you enable.
 
 ---
 
-## Terms you’ll see in the docs
+## Capability Overview
+
+CoPaw's capabilities are built from these modules:
+
+```mermaid
+graph LR
+    User[User] --> Channels[Channels]
+    Channels --> Agent[Agent]
+    Agent --> Tools[Tools]
+    Agent --> Skills[Skills]
+    Agent --> MCP[MCP]
+    Agent --> Memory[Memory]
+    Tools --> Files[Files]
+    Tools --> Shell[Shell]
+    Tools --> Browser[Browser]
+```
+
+| Module      | Description                                                          |
+| ----------- | -------------------------------------------------------------------- |
+| **Channels**| DingTalk, Feishu, QQ, Discord, iMessage, Console; [Channels](./channels) |
+| **Tools**   | File I/O, Shell, code execution, search, browser, memory search; [Built-in Tools](./tools) |
+| **Skills**  | PDF, Word, Excel, PPT, news, email, cron; [Skills](./skills)        |
+| **MCP**     | Connect external MCP servers for more tools; [MCP](./mcp)             |
+| **Memory**  | Context compaction, long-term memory, semantic search; [Memory](./memory) |
+| **Models**  | Cloud (DashScope, ModelScope) or local (llama.cpp, MLX, Ollama); [Local Models](./local-models) |
+
+---
+
+## Terms you'll see in the docs
 
 - **Channel** — Where you talk to CoPaw (DingTalk, Feishu, QQ, Discord, iMessage, etc.).
   Configure each in [Channels](./channels).
@@ -71,4 +99,7 @@ Each term is explained in detail in its chapter.
    - [Heartbeat](./heartbeat) — Set up scheduled check-in or digest (optional);
    - [CLI](./cli) — Init, cron jobs, clean working dir, etc.;
    - [Skills](./skills) — Understand and extend CoPaw’s capabilities;
-   - [Config & working dir](./config) — Working directory and config file.
+   - [Config & working dir](./config) — Working directory and config file;
+   - [Agent Prompt Files](./agent_md_intro) — Customize Agent persona and behavior;
+   - [Local Models](./local-models) — Run locally without API keys;
+   - [Deployment](./deployment) — Production deployment guidance.

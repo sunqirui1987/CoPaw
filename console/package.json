@@ -3,6 +3,15 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "overrides": {
+    "@ant-design/x": {
+      "antd": "$antd"
+    }
+  },
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build",
@@ -16,12 +25,14 @@
     "preview:test": "vite preview --mode test"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.5.1",
     "@agentscope-ai/chat": "^1.1.50",
     "@agentscope-ai/design": "^1.0.14",
     "@agentscope-ai/icons": "^1.0.46",
     "@ant-design/x-markdown": "^2.2.2",
     "ahooks": "^3.9.6",
     "antd": "^5.29.1",
+    "dayjs": "^1.11.7",
     "antd-style": "^3.7.1",
     "i18next": "^25.8.4",
     "lucide-react": "^0.562.0",

@@ -1,5 +1,10 @@
 import { request } from "../request";
-import type { AgentRequest, AgentsRunningConfig } from "../types";
+import type {
+  AgentRequest,
+  AgentsRunningConfig,
+  DefaultsConfig,
+  DefaultsConfigRequest,
+} from "../types";
 
 // Agent API
 export const agentApi = {
@@ -33,4 +38,24 @@ export const agentApi = {
       method: "PUT",
       body: JSON.stringify(config),
     }),
+
+  getDefaultsConfig: () => request<DefaultsConfig>("/agent/defaults-config"),
+
+  updateDefaultsConfig: (config: DefaultsConfigRequest) =>
+    request<DefaultsConfig>("/agent/defaults-config", {
+      method: "PUT",
+      body: JSON.stringify(config),
+    }),
+
+  installMdTemplates: (language: string) =>
+    request<{ copied: string[]; language: string }>(
+      "/agent/install-md-templates",
+      {
+        method: "POST",
+        body: JSON.stringify({ language }),
+      }
+    ),
+
+  getInitStatus: () =>
+    request<{ needs_init: boolean; reason?: string }>("/agent/init-status"),
 };

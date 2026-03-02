@@ -25,6 +25,7 @@ from ...providers import (
     set_active_llm,
     update_provider_settings,
 )
+from ...providers.model_fetcher import get_provider_models
 
 router = APIRouter(prefix="/models", tags=["models"])
 
@@ -80,11 +81,20 @@ def _build_provider_info(
         else []
     )
 
+    # Use dynamic fetch for OpenAI-compatible providers (qnaigc, etc.)
+    base_models = list(provider.models) + extra
+    models = get_provider_models(
+        provider.id,
+        cur_base_url or provider.default_base_url,
+        cur_api_key,
+        base_models,
+    )
+
     return ProviderInfo(
         id=provider.id,
         name=provider.name,
         api_key_prefix=provider.api_key_prefix,
-        models=list(provider.models) + extra,
+        models=models,
         extra_models=extra,
         is_custom=provider.is_custom,
         is_local=provider.is_local,

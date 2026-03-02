@@ -175,20 +175,31 @@ function Prepare-Console {
         return
     }
 
-    if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
-        Write-Warn "npm not found - skipping console frontend build."
-        Write-Warn "Install Node.js from https://nodejs.org/ then re-run this installer,"
-        Write-Warn "or run 'cd console && npm ci && npm run build' manually."
+    if (-not (Get-Command pnpm -ErrorAction SilentlyContinue)) {
+        if (Get-Command corepack -ErrorAction SilentlyContinue) {
+            Write-Info "Enabling pnpm via corepack..."
+            corepack enable 2>$null
+            corepack prepare pnpm@latest --activate 2>$null
+        }
+        if (-not (Get-Command pnpm -ErrorAction SilentlyContinue) -and (Get-Command npm -ErrorAction SilentlyContinue)) {
+            Write-Info "Installing pnpm..."
+            npm install -g pnpm 2>$null
+        }
+    }
+    if (-not (Get-Command pnpm -ErrorAction SilentlyContinue)) {
+        Write-Warn "pnpm not found - skipping console frontend build."
+        Write-Warn "Install Node.js from https://nodejs.org/ then run: corepack enable; corepack prepare pnpm@latest --activate"
+        Write-Warn "or run 'cd console; pnpm install; pnpm run build' manually."
         return
     }
 
-    Write-Info "Building console frontend (npm ci && npm run build)..."
+    Write-Info "Building console frontend (pnpm install && pnpm run build)..."
     Push-Location (Join-Path $RepoDir "console")
     try {
-        npm ci
-        if ($LASTEXITCODE -ne 0) { Write-Warn "npm ci failed - the web UI won't be available."; return }
-        npm run build
-        if ($LASTEXITCODE -ne 0) { Write-Warn "npm run build failed - the web UI won't be available."; return }
+        pnpm install
+        if ($LASTEXITCODE -ne 0) { Write-Warn "pnpm install failed - the web UI won't be available."; return }
+        pnpm run build
+        if ($LASTEXITCODE -ne 0) { Write-Warn "pnpm run build failed - the web UI won't be available."; return }
     } finally {
         Pop-Location
     }
@@ -336,8 +347,8 @@ Write-Host ""
 
 Write-Host "To get started, open a new terminal and run:"
 Write-Host ""
-Write-Host "  copaw init" -ForegroundColor White -NoNewline; Write-Host "       # first-time setup"
-Write-Host "  copaw app" -ForegroundColor White -NoNewline; Write-Host "        # start CoPaw"
+Write-Host "  copaw app" -ForegroundColor White -NoNewline; Write-Host "        # start CoPaw (configure in browser)"
+Write-Host "  copaw init" -ForegroundColor White -NoNewline; Write-Host "       # optional: interactive setup"
 Write-Host ""
 Write-Host "To upgrade later, re-run this installer."
 Write-Host "To uninstall, run: " -NoNewline

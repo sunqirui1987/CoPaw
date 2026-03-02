@@ -18,6 +18,7 @@ import {
   Globe,
   Settings,
   Plug,
+  SlidersHorizontal,
 } from "lucide-react";
 
 const { Sider } = Layout;
@@ -31,6 +32,7 @@ const keyToPath: Record<string, string> = {
   mcp: "/mcp",
   workspace: "/workspace",
   models: "/models",
+  "general-config": "/general-config",
   environments: "/environments",
   "agent-config": "/agent-config",
 };
@@ -128,6 +130,11 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
           key: "models",
           label: t("nav.models"),
           icon: <Box size={16} />,
+        },
+        {
+          key: "general-config",
+          label: t("nav.generalConfig"),
+          icon: <SlidersHorizontal size={16} />,
         },
         {
           key: "environments",

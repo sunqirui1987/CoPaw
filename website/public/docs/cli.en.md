@@ -67,7 +67,7 @@ If the frontend was not built, the root URL returns `{"message": "Hello World"}`
 but the API still works.
 
 **To build the frontend:** in the project's `console/` directory run
-`npm ci && npm run build` (output in `console/dist/`). Docker images and pip
+`pnpm install && pnpm run build` (output in `console/dist/`). Docker images and pip
 packages already include the Console.
 
 ---

@@ -33,6 +33,20 @@ when needed; you can enable or disable them in the Console or via config.
 | **xlsx**                     | Read, edit, and create spreadsheets (.xlsx, .xlsm, .csv, .tsv), clean up formatting, formulas, and data analysis.                                                           | https://github.com/anthropics/skills/tree/main/skills/xlsx     |
 | **browser_visible**          | Launch a real, visible (headed) browser window for demos, debugging, or scenarios requiring human interaction (e.g. login, CAPTCHA).                                        | Built-in                                                       |
 
+### Dependencies and environment variables
+
+| Skill     | Dependencies                    | Env vars example              |
+| --------- | ------------------------------- | ------------------------------ |
+| **pdf**   | `pypdf`, `pdf2image`, etc.      | None                           |
+| **docx**  | `python-docx`                   | None                           |
+| **pptx**  | `python-pptx`                   | None                           |
+| **xlsx**  | `openpyxl`, `pandas`, optional LibreOffice | None                 |
+| **news**  | Network requests                | None                           |
+| **himalaya** | Requires `himalaya` CLI      | `IMAP_*`, `SMTP_*` for email   |
+| **browser_visible** | `playwright`             | None                           |
+
+Some skills (e.g. web search) need third-party API keys like `TAVILY_API_KEY` in [Settings → Environment variables](./console).
+
 ---
 
 ## Managing skills in the Console

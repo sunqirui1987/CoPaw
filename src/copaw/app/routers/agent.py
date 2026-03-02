@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Agent file management API."""
 
+from typing import Optional
+
 from fastapi import APIRouter, Body, HTTPException
 from pydantic import BaseModel, Field
 
@@ -9,10 +11,37 @@ from ...config import (
     save_config,
     AgentsRunningConfig,
 )
+from ...config.config import (
+    ActiveHoursConfig,
+    HeartbeatConfig,
+)
 
 from ...agents.memory.agent_md_manager import AGENT_MD_MANAGER
+from ...agents.utils import copy_md_files
+from ...providers import get_active_llm_config, load_providers_json
 
 router = APIRouter(prefix="/agent", tags=["agent"])
+
+
+class InitStatusResponse(BaseModel):
+    """Whether first-time init is needed."""
+
+    needs_init: bool = Field(..., description="True if config missing or no active LLM")
+    reason: Optional[str] = Field(None, description="Reason when needs_init is True")
+
+
+@router.get(
+    "/init-status",
+    response_model=InitStatusResponse,
+    summary="Check if first-time init is needed",
+    description="Returns needs_init=True when no active LLM is configured (primary blocker).",
+)
+async def get_init_status() -> InitStatusResponse:
+    """Check if the user needs to run first-time setup."""
+    active_llm = get_active_llm_config()
+    if active_llm is None:
+        return InitStatusResponse(needs_init=True, reason="no_active_llm")
+    return InitStatusResponse(needs_init=False)
 
 
 class MdFileInfo(BaseModel):
@@ -29,6 +58,49 @@ class MdFileContent(BaseModel):
     """Markdown file content."""
 
     content: str = Field(..., description="File content")
+
+
+class ActiveHoursRequest(BaseModel):
+    """Active hours for heartbeat (e.g. 08:00–22:00)."""
+
+    start: str = Field(default="08:00", description="Start time (HH:MM)")
+    end: str = Field(default="22:00", description="End time (HH:MM)")
+
+
+class HeartbeatConfigRequest(BaseModel):
+    """Heartbeat configuration request."""
+
+    every: str = Field(default="30m", description="Interval (e.g. 30m, 1h)")
+    target: str = Field(
+        default="main",
+        description="Target: main (no dispatch) or last (dispatch to last channel)",
+    )
+    active_hours: Optional[ActiveHoursRequest] = Field(
+        default=None,
+        description="Optional active window; null = run 24h",
+    )
+
+
+class DefaultsConfigResponse(BaseModel):
+    """Defaults config (heartbeat, show_tool_details, language)."""
+
+    heartbeat: Optional[HeartbeatConfig] = None
+    show_tool_details: bool = True
+    language: str = "zh"
+
+
+class DefaultsConfigRequest(BaseModel):
+    """Defaults config update request."""
+
+    heartbeat: Optional[HeartbeatConfigRequest] = None
+    show_tool_details: bool = True
+    language: str = "zh"
+
+
+class InstallMdTemplatesRequest(BaseModel):
+    """Install MD templates request."""
+
+    language: str = Field(default="zh", description="Language: zh or en")
 
 
 @router.get(
@@ -170,3 +242,82 @@ async def put_agents_running_config(
     config.agents.running = running_config
     save_config(config)
     return running_config
+
+
+@router.get(
+    "/defaults-config",
+    response_model=DefaultsConfigResponse,
+    summary="Get defaults config",
+    description="Retrieve heartbeat, show_tool_details, and language config",
+)
+async def get_defaults_config() -> DefaultsConfigResponse:
+    """Get defaults configuration."""
+    config = load_config()
+    return DefaultsConfigResponse(
+        heartbeat=config.agents.defaults.heartbeat,
+        show_tool_details=config.show_tool_details,
+        language=config.agents.language,
+    )
+
+
+@router.put(
+    "/defaults-config",
+    response_model=DefaultsConfigResponse,
+    summary="Update defaults config",
+    description="Update heartbeat, show_tool_details, and language config",
+)
+async def put_defaults_config(
+    body: DefaultsConfigRequest = Body(
+        ...,
+        description="Updated defaults configuration",
+    ),
+) -> DefaultsConfigResponse:
+    """Update defaults configuration."""
+    config = load_config()
+    if body.heartbeat is not None:
+        active_hours = None
+        if body.heartbeat.active_hours is not None:
+            active_hours = ActiveHoursConfig(
+                start=body.heartbeat.active_hours.start,
+                end=body.heartbeat.active_hours.end,
+            )
+        config.agents.defaults.heartbeat = HeartbeatConfig(
+            every=body.heartbeat.every,
+            target=body.heartbeat.target,
+            active_hours=active_hours,
+        )
+    config.show_tool_details = body.show_tool_details
+    if body.language in ("zh", "en"):
+        config.agents.language = body.language
+    save_config(config)
+    return DefaultsConfigResponse(
+        heartbeat=config.agents.defaults.heartbeat,
+        show_tool_details=config.show_tool_details,
+        language=config.agents.language,
+    )
+
+
+@router.post(
+    "/install-md-templates",
+    response_model=dict,
+    summary="Install MD templates",
+    description="Copy MD templates (SOUL.md, HEARTBEAT.md, etc.) to working dir",
+)
+async def install_md_templates(
+    body: InstallMdTemplatesRequest = Body(
+        ...,
+        description="Language for templates",
+    ),
+) -> dict:
+    """Install MD templates for the given language."""
+    if body.language not in ("zh", "en"):
+        raise HTTPException(
+            status_code=400,
+            detail="language must be 'zh' or 'en'",
+        )
+    copied = copy_md_files(body.language, skip_existing=True)
+    config = load_config()
+    config.agents.language = body.language
+    config.agents.installed_md_files_language = body.language
+    save_config(config)
+    return {"copied": copied, "language": body.language}

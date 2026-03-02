@@ -9,7 +9,7 @@
 
 > 📖 阅读前请先了解 [项目介绍](./intro)，完成安装与启动后可查看 [控制台](./console)。
 
-> 💡 **安装并启动后**：在配置频道之前，可先打开 [控制台](./console)（浏览器访问 `http://127.0.0.1:8088/`）与 CoPAW 对话、配置 Agent；要在钉钉、飞书、QQ 等 app 里对话时，再前往 [频道配置](./channels) 接入频道。
+> 💡 **无需预先执行 `copaw init`**：安装后直接运行 `copaw app` 即可启动。API Key、模型、频道、心跳等配置均可在 [控制台](./console)（`http://127.0.0.1:8088/`）中完成。
 
 ---
 
@@ -67,30 +67,15 @@ bash install.sh --extras mlx         # MLX（Apple Silicon）
 
 升级只需重新运行安装命令。卸载请运行 `copaw uninstall`。
 
-### 步骤二：初始化
-
-在工作目录（默认 `~/.copaw`）下生成 `config.json` 与 `HEARTBEAT.md`。两种方式：
-
-- **快速用默认配置**（不交互，适合先跑起来再改配置）：
-  ```bash
-  copaw init --defaults
-  ```
-- **交互式初始化**（按提示填写心跳间隔、投递目标、活跃时段，并可顺带配置频道与 Skills）：
-  ```bash
-  copaw init
-  ```
-  详见 [CLI - 快速上手](./cli#快速上手)。
-
-若已有配置想覆盖，可使用 `copaw init --force`（会提示确认）。
-初始化后若尚未启用频道，接入钉钉、飞书、QQ 等需在 [频道配置](./channels) 中按文档填写。
-
-### 步骤三：启动服务
+### 步骤二：启动服务
 
 ```bash
 copaw app
 ```
 
-服务默认监听 `127.0.0.1:8088`。若已配置频道，CoPaw 会在对应 app 内回复；若尚未配置，也可先完成本节再前往频道配置。
+服务默认监听 `127.0.0.1:8088`。在浏览器打开该地址进入控制台，**API Key、模型、频道、心跳等均可在此配置**，无需预先执行 `copaw init`。
+
+> **可选：`copaw init`** — 若希望交互式配置（安全提示、心跳间隔、投递目标、活跃时段等），可运行 `copaw init`。详见 [CLI - 快速上手](./cli#快速上手)。
 
 ---
 
@@ -105,7 +90,7 @@ pip install copaw
 可选：先创建并激活虚拟环境再安装（`python -m venv .venv`，Linux/macOS 下
 `source .venv/bin/activate`，Windows 下 `.venv\Scripts\Activate.ps1`）。安装后会提供 `copaw` 命令。
 
-然后按上方 [步骤二：初始化](#步骤二初始化) 和 [步骤三：启动服务](#步骤三启动服务) 操作。
+然后按上方 [步骤二：启动服务](#步骤二启动服务) 操作。
 
 ---
 
@@ -143,6 +128,24 @@ curl -N -X POST "http://localhost:8088/api/agent/process" \
 
 同一 `session_id` 可进行多轮对话。
 
+**验证配置接口：**
+
+```bash
+curl "http://localhost:8088/api/config/channels"
+```
+
+**本地模型快速体验（可选）：**
+
+若已安装 `pip install 'copaw[llamacpp]'` 或 `pip install 'copaw[mlx]'`：
+
+```bash
+copaw models download Qwen/Qwen2-0.5B-Instruct-GGUF --source modelscope
+copaw models config   # 选择 llamacpp 提供商，选择刚下载的模型
+copaw app
+```
+
+详见 [本地模型](./local-models)。
+
 ---
 
 ## 接下来做什么？
@@ -151,3 +154,4 @@ curl -N -X POST "http://localhost:8088/api/agent/process" \
 - **想定时自动跑一套「自检/摘要」** → 看 [心跳](./heartbeat)，编辑 HEARTBEAT.md 并在 config 里设间隔和 target。
 - **想用更多命令** → [CLI](./cli)（交互式 init、定时任务、清空工作目录）、[Skills](./skills)。
 - **想改工作目录或配置文件路径** → [配置与工作目录](./config)。
+- **想用本地模型（无 API Key）** → [本地模型](./local-models)。

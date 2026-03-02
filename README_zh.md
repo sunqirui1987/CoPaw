@@ -25,7 +25,7 @@
 
 </div>
 
-你的AI个人助理；安装极简、本地与云上均可部署；支持多端接入、能力轻松扩展。
+你的 AI 个人助理；安装极简、本地与云上均可部署；支持多端接入、能力轻松扩展。
 
 > **核心能力：**
 >
@@ -53,42 +53,50 @@
 
 ## 目录
 
-> **推荐阅读：**
->
-> - **我想三条命令跑起来**： [快速开始](#快速开始) → 浏览器打开控制台。
-> - **我想在钉钉 / 飞书 / QQ 里聊**： [快速开始](#快速开始) → [频道配置](https://copaw.agentscope.io/docs/channels)。
-> - **我不想装 Python**：[一键安装](#一键安装beta持续完善中) 自动管理 Python，或使用 [魔搭一键配置](https://modelscope.cn/studios/fork?target=AgentScope/CoPaw) 云端部署。
-
+- [安装](#安装)
 - [快速开始](#快速开始)
-- [API Key](#api-key)
+- [API Key 与模型](#api-key-与模型)
 - [本地模型](#本地模型)
 - [文档](#文档)
-- [从源码安装](#从源码安装)
 - [为什么叫 CoPaw？](#为什么叫-copaw)
 - [由谁构建](#由谁构建)
 - [许可证](#许可证)
 
 ---
 
-## 快速开始
+## 安装
 
-### pip 安装 (推荐)
+CoPaw 支持多种安装方式，按需选择：
 
-如果你习惯自行管理 Python 环境：
+| 方式 | 适用场景 | 前置条件 |
+|------|----------|----------|
+| **pip 安装** | 自行管理 Python 环境 | Python 3.10 ~ 3.13 |
+| **一键安装** | 不想装 Python | 无 |
+| **Docker** | 容器化部署 | Docker |
+| **从源码安装** | 开发、贡献、使用最新代码 | Git、Python 3.10 ~ 3.13 |
+| **魔搭创空间** | 云端、零本地安装 | 魔搭账号 |
+| **阿里云 ECS** | 生产级云服务器 | 阿里云账号 |
+
+### 方式一：pip 安装（推荐）
+
+适合已配置 Python 环境的用户（需 Python >= 3.10, < 3.14）。
 
 ```bash
 pip install copaw
-copaw init --defaults
-copaw app
 ```
 
-在浏览器打开 **http://127.0.0.1:8088/** 即可使用控制台（与 CoPaw 对话、配置 Agent）。若要在钉钉、飞书、QQ 等 app 内对话，请在 [文档](https://copaw.agentscope.io/docs/channels) 中接入频道。
+**推荐使用虚拟环境：**
 
-![Console](https://img.alicdn.com/imgextra/i4/O1CN01Q0kWkE1WlHCNXeUlb_!!6000000002828-2-tps-3822-2070.png)
+```bash
+python -m venv .venv
+source .venv/bin/activate   # Linux/macOS
+# 或 .venv\Scripts\Activate.ps1  # Windows
+pip install copaw
+```
 
-### 一键安装（beta，持续完善中）
+### 方式二：一键安装（beta）
 
-无需预装 Python — 安装脚本自动处理一切：
+无需预装 Python，安装脚本通过 [uv](https://docs.astral.sh/uv/) 自动管理环境。
 
 **macOS / Linux：**
 
@@ -102,92 +110,125 @@ curl -fsSL https://copaw.agentscope.io/install.sh | bash
 irm https://copaw.agentscope.io/install.ps1 | iex
 ```
 
-然后打开新终端并运行：
-
-```bash
-copaw init --defaults   # 或：copaw init（交互式）
-copaw app
-```
-
-<details>
-<summary><b>安装选项</b></summary>
-
-**macOS / Linux：**
+**可选参数：**
 
 ```bash
 # 安装指定版本
-curl -fsSL ... | bash -s -- --version 0.0.2
+curl -fsSL https://copaw.agentscope.io/install.sh | bash -s -- --version 0.0.2
 
-# 从源码安装（开发/测试用）
-curl -fsSL ... | bash -s -- --from-source
+# 从源码安装（开发/测试）
+curl -fsSL https://copaw.agentscope.io/install.sh | bash -s -- --from-source
 
 # 安装本地模型支持
-bash install.sh --extras llamacpp    # llama.cpp（跨平台）
-bash install.sh --extras mlx         # MLX（Apple Silicon）
-bash install.sh --extras llamacpp,mlx
+curl -fsSL https://copaw.agentscope.io/install.sh | bash -s -- --extras llamacpp    # llama.cpp
+curl -fsSL https://copaw.agentscope.io/install.sh | bash -s -- --extras mlx         # MLX（Apple Silicon）
+curl -fsSL https://copaw.agentscope.io/install.sh | bash -s -- --extras llamacpp,mlx
 
 # 升级 — 重新运行安装命令即可
-curl -fsSL ... | bash
+curl -fsSL https://copaw.agentscope.io/install.sh | bash
 
 # 卸载
 copaw uninstall          # 保留配置和数据
 copaw uninstall --purge  # 删除所有内容
 ```
 
-**Windows（PowerShell）：**
-
-```powershell
-# 安装指定版本
-irm ... | iex; .\install.ps1 -Version 0.0.2
-
-# 从源码安装（开发/测试用）
-.\install.ps1 -FromSource
-
-# 安装本地模型支持
-.\install.ps1 -Extras llamacpp      # llama.cpp（跨平台）
-.\install.ps1 -Extras mlx           # MLX
-.\install.ps1 -Extras llamacpp,mlx
-
-# 升级 — 重新运行安装命令即可
-irm ... | iex
-
-# 卸载
-copaw uninstall          # 保留配置和数据
-copaw uninstall --purge  # 删除所有内容
-```
-
-</details>
-
-### 使用 Docker
+### 方式三：Docker
 
 ```bash
 docker pull agentscope/copaw:latest
 docker run -p 8088:8088 -v copaw-data:/app/working agentscope/copaw:latest
 ```
 
-然后在浏览器打开 **http://127.0.0.1:8088/** 进入控制台。配置、记忆与 Skills 保存在 `copaw-data` 卷中。如需传入 API Key（如 `DASHSCOPE_API_KEY`），在 `docker run` 时添加 `-e VAR=value` 或 `--env-file .env`。
+**传递 API Key：**
 
-镜像从零构建。若需自行构建镜像，请参阅 [scripts/README.md](scripts/README.md#build-docker-image) 中的「Build Docker image」小节，构建后推送到你的镜像仓库。
+```bash
+docker run -p 8088:8088 -v copaw-data:/app/working \
+  -e DASHSCOPE_API_KEY=sk-xxx \
+  agentscope/copaw:latest
+```
 
-### 使用魔搭创空间
+或使用 `.env` 文件：
+
+```bash
+docker run -p 8088:8088 -v copaw-data:/app/working --env-file .env agentscope/copaw:latest
+```
+
+**自定义工作目录：**
+
+```bash
+docker run -p 8088:8088 -v /path/to/your/copaw:/app/working agentscope/copaw:latest
+```
+
+### 方式四：从源码安装
+
+适合参与开发、贡献代码或使用最新未发布版本的场景。
+
+```bash
+git clone https://github.com/agentscope-ai/CoPaw.git
+cd CoPaw
+pip install -e .
+```
+
+**构建控制台前端**（必选 — `console/dist` 未提交到仓库）：
+
+```bash
+cd console && pnpm install && pnpm run build
+```
+
+然后按 [快速开始](#快速开始) 执行 `copaw init --defaults` 和 `copaw app`，在浏览器打开 **http://127.0.0.1:8088/** 即可使用控制台。
+
+**可选：**
+
+- **开发环境**（测试、格式化）：`pip install -e ".[dev]"`
+- **本地模型支持**：`pip install -e ".[llamacpp]"` 或 `pip install -e ".[mlx]"`
+
+### 方式五：魔搭创空间
 
 **不想本地安装？** 使用 [魔搭创空间](https://modelscope.cn/studios/fork?target=AgentScope/CoPaw) 一键云端配置。请将创空间设为 **非公开**，否则他人可能操纵你的 CoPaw。
 
-### 部署到阿里云 ECS
+### 方式六：阿里云 ECS
 
-若希望将 CoPaw 部署在阿里云上，可使用阿里云 ECS 一键部署：打开 [CoPaw 阿里云 ECS 部署链接](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceId=service-1ed84201799f40879884) 按页面提示操作即可。详细步骤见 [阿里云开发者社区：CoPaw 3 分钟部署你的 AI 助理](https://developer.aliyun.com/article/1713682)。
+打开 [CoPaw 阿里云 ECS 部署链接](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceId=service-1ed84201799f40879884) 按页面提示操作。详细步骤见 [阿里云开发者社区：CoPaw 3 分钟部署你的 AI 助理](https://developer.aliyun.com/article/1713682)。
 
 ---
 
-## API Key
+## 快速开始
 
-若使用**云端大模型**（如 DashScope、ModelScope），在开始对话前必须配置 API Key。未配置有效 Key 前，CoPaw 无法正常工作。
+安装完成后，执行：
+
+```bash
+copaw init --defaults   # 或 copaw init（交互式配置）
+copaw app
+```
+
+在浏览器打开 **http://127.0.0.1:8088/** 即可使用控制台（与 CoPaw 对话、配置 Agent）。
+
+若要在钉钉、飞书、QQ 等 app 内对话，请在 [文档](https://copaw.agentscope.io/docs/channels) 中接入频道。
+
+![Console](https://img.alicdn.com/imgextra/i4/O1CN01Q0kWkE1WlHCNXeUlb_!!6000000002828-2-tps-3822-2070.png)
+
+---
+
+## API Key 与模型
+
+若使用**云端大模型**，在开始对话前必须配置 API Key。未配置有效 Key 前，CoPaw 无法正常工作。
+
+**支持的云端提供商：**
+
+| 提供商 | 说明 |
+|--------|------|
+| **DashScope** | 阿里云通义千问 |
+| **ModelScope** | 魔搭社区 |
+| **Aliyun Coding Plan** | 阿里云 Coding Plan |
+| **Qiniu MaaS (qnaigc)** | 七牛云大模型推理服务 |
+| **Ollama** | 本地 Ollama 服务 |
+| **自定义** | 任意 OpenAI 兼容 API |
 
 **配置方式：**
 
-1. **`copaw init`** — 运行 `copaw init` 时，会引导你配置 LLM 提供商与 API Key。按提示选择提供商并填写 Key 即可。
-2. **控制台** — 运行 `copaw app` 后，打开 **http://127.0.0.1:8088/** → **设置** → **模型**。选择提供商、填写 **API Key**，并启用该提供商与模型。
-3. **环境变量** — 使用 DashScope 时，可在终端或工作目录下的 `.env` 文件中设置 `DASHSCOPE_API_KEY`。
+1. **`copaw init`** — 运行时会引导你配置 LLM 提供商与 API Key。
+2. **控制台** — 打开 **http://127.0.0.1:8088/** → **设置** → **模型**。选择提供商、填写 **API Key**，并启用该提供商与模型。
+3. **环境变量** — 使用 DashScope 时，可设置 `DASHSCOPE_API_KEY`；使用七牛 MaaS 时，在控制台配置 qnaigc 的 API Key。
 
 其他工具所需密钥（如网页搜索的 `TAVILY_API_KEY`）可在控制台 **设置 → 环境变量** 中配置，详见 [配置](https://copaw.agentscope.io/docs/config)。
 
@@ -199,17 +240,17 @@ docker run -p 8088:8088 -v copaw-data:/app/working agentscope/copaw:latest
 
 CoPaw 可在本机完全本地运行大模型，无需 API Key 或云端服务。
 
-| 后端          | 适用场景                          | 安装                            |
-| ------------- | --------------------------------- | ------------------------------- |
+| 后端 | 适用场景 | 安装 |
+|------|----------|------|
 | **llama.cpp** | 跨平台（macOS / Linux / Windows） | `pip install 'copaw[llamacpp]'` |
-| **MLX**       | Apple Silicon（M1/M2/M3/M4）      | `pip install 'copaw[mlx]'`      |
+| **MLX** | Apple Silicon（M1/M2/M3/M4） | `pip install 'copaw[mlx]'` |
 
 安装后下载模型并开始对话：
 
 ```bash
 copaw models download Qwen/Qwen3-4B-GGUF
 copaw models # 选择已下载的模型
-copaw app # 启动服务
+copaw app    # 启动服务
 ```
 
 也可在控制台界面中下载与管理本地模型。
@@ -218,34 +259,22 @@ copaw app # 启动服务
 
 ## 文档
 
-| 主题                                                      | 说明                                 |
-| --------------------------------------------------------- | ------------------------------------ |
-| [项目介绍](https://copaw.agentscope.io/docs/intro)        | CoPaw 是什么、怎么用                 |
-| [快速开始](https://copaw.agentscope.io/docs/quickstart)   | 安装与运行（本地或魔搭创空间）       |
-| [控制台](https://copaw.agentscope.io/docs/console)        | Web 界面：对话与 Agent 配置          |
-| [频道配置](https://copaw.agentscope.io/docs/channels)     | 钉钉、飞书、QQ、Discord、iMessage 等 |
-| [心跳](https://copaw.agentscope.io/docs/heartbeat)        | 定时自检与摘要                       |
-| [本地模型](https://copaw.agentscope.io/docs/local-models) | 使用 llama.cpp 或 MLX 本地运行模型   |
-| [CLI](https://copaw.agentscope.io/docs/cli)               | 初始化、定时任务、Skills、清理       |
-| [Skills](https://copaw.agentscope.io/docs/skills)         | 扩展与自定义能力                     |
-| [FAQ](https://copaw.agentscope.io/docs/faq)               | 常见问题与报错排查                   |
-| [记忆](https://copaw.agentscope.io/docs/memory)           | 上下文管理与长期记忆                 |
-| [配置与工作目录](https://copaw.agentscope.io/docs/config) | 工作目录与配置文件                   |
+| 主题 | 说明 |
+|------|------|
+| [项目介绍](https://copaw.agentscope.io/docs/intro) | CoPaw 是什么、怎么用 |
+| [快速开始](https://copaw.agentscope.io/docs/quickstart) | 安装与运行（本地或魔搭创空间） |
+| [部署指南](https://copaw.agentscope.io/docs/deployment) | 多种部署方式详解 |
+| [控制台](https://copaw.agentscope.io/docs/console) | Web 界面：对话与 Agent 配置 |
+| [频道配置](https://copaw.agentscope.io/docs/channels) | 钉钉、飞书、QQ、Discord、iMessage 等 |
+| [心跳](https://copaw.agentscope.io/docs/heartbeat) | 定时自检与摘要 |
+| [本地模型](https://copaw.agentscope.io/docs/local-models) | 使用 llama.cpp 或 MLX 本地运行模型 |
+| [CLI](https://copaw.agentscope.io/docs/cli) | 初始化、定时任务、Skills、清理 |
+| [Skills](https://copaw.agentscope.io/docs/skills) | 扩展与自定义能力 |
+| [FAQ](https://copaw.agentscope.io/docs/faq) | 常见问题与报错排查 |
+| [记忆](https://copaw.agentscope.io/docs/memory) | 上下文管理与长期记忆 |
+| [配置与工作目录](https://copaw.agentscope.io/docs/config) | 工作目录与配置文件 |
 
 完整文档见本仓库 [website/public/docs/](website/public/docs/)。
-
----
-
-## 从源码安装
-
-```bash
-git clone https://github.com/agentscope-ai/CoPaw.git
-cd CoPaw
-pip install -e .
-```
-
-- **开发**（测试、格式化）：`pip install -e ".[dev]"`
-- **控制台**（构建前端）：在项目根目录执行 `cd console && npm ci && npm run build`，再运行 `copaw app`。
 
 ---
 
@@ -263,8 +292,8 @@ CoPaw 既是「你的搭档小爪子」（co-paw），也寓意 **Co Personal Ag
 
 ## 联系我们
 
-| [Discord](https://discord.gg/eYMpfnkG8h)                     | [钉钉](https://qr.dingtalk.com/action/joingroup?code=v1,k1,OmDlBXpjW+I2vWjKDsjvI9dhcXjGZi3bQiojOq3dlDw=&_dt_no_comment=1&origin=11) |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [Discord](https://discord.gg/eYMpfnkG8h) | [钉钉](https://qr.dingtalk.com/action/joingroup?code=v1,k1,OmDlBXpjW+I2vWjKDsjvI9dhcXjGZi3bQiojOq3dlDw=&_dt_no_comment=1&origin=11) |
+|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
 | [<img src="https://gw.alicdn.com/imgextra/i1/O1CN01hhD1mu1Dd3BWVUvxN_!!6000000000238-2-tps-400-400.png" width="80" height="80" alt="Discord">](https://discord.gg/eYMpfnkG8h) | [<img src="https://img.alicdn.com/imgextra/i4/O1CN014mhqFq1ZlgNuYjxrz_!!6000000003235-2-tps-400-400.png" width="80" height="80" alt="钉钉">](https://qr.dingtalk.com/action/joingroup?code=v1,k1,OmDlBXpjW+I2vWjKDsjvI9dhcXjGZi3bQiojOq3dlDw=&_dt_no_comment=1&origin=11) |
 
 ---

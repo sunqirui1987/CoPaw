@@ -59,7 +59,7 @@ copaw app --log-level debug           # 详细日志
 
 若未构建前端，根路径返回 `{"message": "Hello World"}`，API 仍可正常使用。
 
-**构建方式：** 在项目 `console/` 目录下执行 `npm ci && npm run build`，产物在
+**构建方式：** 在项目 `console/` 目录下执行 `pnpm install && pnpm run build`，产物在
 `console/dist/`。Docker 镜像或 pip 安装包已内置控制台，无需单独构建。
 
 ---

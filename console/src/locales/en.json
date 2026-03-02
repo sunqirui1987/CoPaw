@@ -34,6 +34,7 @@
     "agentConfig": "Configuration",
     "settings": "Settings",
     "models": "Models",
+    "generalConfig": "General Config",
     "environments": "Environments"
   },
   "workspace": {
@@ -51,7 +52,13 @@
     "downloadFailed": "Workspace download failed",
     "zipOnly": "Only .zip files are supported for upload",
     "fileSizeExceeded": "File size exceeds 100MB limit. Current file: {{size}}MB",
-    "attribution": "Workspace design partly inspired by the OpenClaw project — thank you! 🐾"
+    "attribution": "Workspace design partly inspired by the OpenClaw project — thank you! 🐾",
+    "installTemplates": "Install MD Templates",
+    "installTemplatesTitle": "Install MD Templates",
+    "installTemplatesDesc": "Copy SOUL.md, HEARTBEAT.md, and other templates to the working directory. Existing files are skipped.",
+    "installTemplatesSuccess": "Installed {{count}} template file(s)",
+    "installTemplatesAlreadyPresent": "Templates already present, skipped",
+    "installTemplatesFailed": "Failed to install templates"
   },
   "skills": {
     "title": "Skills",
@@ -341,6 +348,49 @@
     "saveSuccess": "Configuration saved successfully",
     "saveFailed": "Failed to save configuration",
     "loadFailed": "Failed to load configuration"
+  },
+  "generalConfig": {
+    "title": "General Config",
+    "description": "Configure heartbeat, display options, and language (same as copaw init)",
+    "heartbeatSection": "Heartbeat",
+    "heartbeatEvery": "Heartbeat interval",
+    "heartbeatEveryTooltip": "Execution interval, e.g. 30m, 1h, 2h30m",
+    "heartbeatEveryRequired": "Please enter heartbeat interval",
+    "heartbeatTarget": "Dispatch target",
+    "heartbeatTargetTooltip": "main: do not send to channel; last: send to last conversation channel",
+    "targetMain": "Run only, no dispatch",
+    "targetLast": "Send to last conversation channel",
+    "activeHours": "Active hours",
+    "activeHoursHint": "Run heartbeat only during specified hours (off = run 24h)",
+    "activeStart": "Start time",
+    "activeEnd": "End time",
+    "displaySection": "Display",
+    "showToolDetails": "Show tool call details",
+    "showToolDetailsTooltip": "Show tool call and result details in channel messages",
+    "languageSection": "Language",
+    "language": "Language",
+    "languageTooltip": "Language for MD templates and persona files",
+    "languageZh": "中文",
+    "languageEn": "English",
+    "saveSuccess": "Configuration saved successfully",
+    "saveFailed": "Failed to save configuration",
+    "loadFailed": "Failed to load configuration"
+  },
+  "init": {
+    "title": "First-time Setup",
+    "securityTitle": "Security Notice — Please Read",
+    "securityDesc": "CoPaw is a personal assistant that runs in your own environment. It can connect to channels (DingTalk, Feishu, QQ, Discord, iMessage, etc.) and run skills that read files, run commands, and call external APIs. By default it is a single-operator boundary. A malicious or confused prompt can lead the agent to do unsafe things if tools are enabled.\n\nIf multiple people can message the same CoPaw instance with tools enabled, they share the same delegated authority (files, commands, secrets).\n\nRecommended: Restrict which channels and users can trigger the agent; use separate config for multi-user; run skills with least privilege; review config and skills regularly.",
+    "acceptSecurity": "I have read and understood",
+    "startConfig": "Start Configuration",
+    "configSteps": "Complete the following to get started:",
+    "stepModels": "Configure LLM Model",
+    "stepModelsDesc": "Set API Key and model in Settings",
+    "stepGeneral": "General Config (optional)",
+    "stepGeneralDesc": "Heartbeat, language, etc.",
+    "goToModels": "Configure Model",
+    "goToGeneral": "General Config",
+    "later": "Configure Later",
+    "afterConfigHint": "After configuration, refresh the page or return here to auto-detect completion."
   },
   "modelConfig": {
     "promptTitle": "LLM Model Required",

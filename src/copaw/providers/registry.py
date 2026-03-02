@@ -41,6 +41,23 @@ ALIYUN_CODINGPLAN_MODELS: List[ModelInfo] = [
     ModelInfo(id="qwen3-coder-plus", name="Qwen3 Coder Plus"),
 ]
 
+QNAIGC_MODELS: List[ModelInfo] = [
+    ModelInfo(id="qwen3-max", name="Qwen3 Max"),
+    ModelInfo(
+        id="qwen3-235b-a22b-thinking-2507",
+        name="Qwen3 235B A22B Thinking",
+    ),
+    ModelInfo(id="deepseek-v3", name="DeepSeek-V3"),
+    ModelInfo(id="deepseek-v3.1", name="DeepSeek-V3.1"),
+    ModelInfo(id="deepseek-v3.2", name="DeepSeek-V3.2"),
+    ModelInfo(id="gpt-4", name="GPT-4"),
+    ModelInfo(id="gpt-4o", name="GPT-4o"),
+    ModelInfo(id="claude-3-5-sonnet", name="Claude 3.5 Sonnet"),
+    ModelInfo(id="claude-3-5-haiku", name="Claude 3.5 Haiku"),
+    ModelInfo(id="gemini-2.5-pro", name="Gemini 2.5 Pro"),
+    ModelInfo(id="gemini-2.5-flash", name="Gemini 2.5 Flash"),
+]
+
 PROVIDER_MODELSCOPE = ProviderDefinition(
     id="modelscope",
     name="ModelScope",
@@ -63,6 +80,14 @@ PROVIDER_ALIYUN_CODINGPLAN = ProviderDefinition(
     default_base_url="https://coding.dashscope.aliyuncs.com/v1",
     api_key_prefix="sk-sp",
     models=ALIYUN_CODINGPLAN_MODELS,
+)
+
+PROVIDER_QNAIGC = ProviderDefinition(
+    id="qnaigc",
+    name="Qiniu MaaS (qnaigc)",
+    default_base_url="https://api.qnaigc.com/v1",
+    api_key_prefix="",
+    models=QNAIGC_MODELS,
 )
 
 PROVIDER_LLAMACPP = ProviderDefinition(
@@ -96,6 +121,7 @@ _BUILTIN_IDS: frozenset[str] = frozenset(
         "modelscope",
         "dashscope",
         "aliyun-codingplan",
+        "qnaigc",
         "ollama",
         "llamacpp",
         "mlx",
@@ -106,6 +132,7 @@ PROVIDERS: dict[str, ProviderDefinition] = {
     PROVIDER_MODELSCOPE.id: PROVIDER_MODELSCOPE,
     PROVIDER_DASHSCOPE.id: PROVIDER_DASHSCOPE,
     PROVIDER_ALIYUN_CODINGPLAN.id: PROVIDER_ALIYUN_CODINGPLAN,
+    PROVIDER_QNAIGC.id: PROVIDER_QNAIGC,
     PROVIDER_OLLAMA.id: PROVIDER_OLLAMA,
     PROVIDER_LLAMACPP.id: PROVIDER_LLAMACPP,
     PROVIDER_MLX.id: PROVIDER_MLX,

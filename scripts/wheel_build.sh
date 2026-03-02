@@ -10,8 +10,8 @@ CONSOLE_DIR="$REPO_ROOT/console"
 CONSOLE_DEST="$REPO_ROOT/src/copaw/console"
 
 echo "[wheel_build] Building console frontend..."
-(cd "$CONSOLE_DIR" && npm ci)
-(cd "$CONSOLE_DIR" && npm run build)
+(cd "$CONSOLE_DIR" && pnpm install)
+(cd "$CONSOLE_DIR" && pnpm run build)
 
 echo "[wheel_build] Copying console/dist/* -> src/copaw/console/..."
 rm -rf "$CONSOLE_DEST"/*

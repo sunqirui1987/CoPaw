@@ -9,7 +9,7 @@ This section describes four ways to run CoPAW:
 
 > 📖 Read [Introduction](./intro) first; after install see [Console](./console).
 
-> 💡 **After install & start**: Before configuring channels, you can open the [Console](./console) (`http://127.0.0.1:8088/`) to chat with CoPAW and configure the agent. When you're ready to chat in DingTalk, Feishu, QQ, etc., head to [Channels](./channels) to add a channel.
+> 💡 **No `copaw init` required**: After install, run `copaw app` directly. API keys, models, channels, heartbeat, and other settings can all be configured in the [Console](./console) (`http://127.0.0.1:8088/`).
 
 ---
 
@@ -67,36 +67,15 @@ bash install.sh --extras mlx         # MLX (Apple Silicon)
 
 To upgrade, simply re-run the install command. To uninstall, run `copaw uninstall`.
 
-### Step 2: Init
-
-Generate `config.json` and `HEARTBEAT.md` in the working directory (default
-`~/.copaw`). Two options:
-
-- **Use defaults** (no prompts; good for getting running first, then editing
-  config later):
-  ```bash
-  copaw init --defaults
-  ```
-- **Interactive** (prompts for heartbeat interval, target, active hours, and
-  optional channel and Skills setup):
-  ```bash
-  copaw init
-  ```
-  See [CLI - Getting started](./cli#getting-started).
-
-To overwrite existing config, use `copaw init --force` (you will be prompted).
-After init, if no channel is enabled yet, follow [Channels](./channels) to add
-DingTalk, Feishu, QQ, etc.
-
-### Step 3: Start the server
+### Step 2: Start the server
 
 ```bash
 copaw app
 ```
 
-The server listens on `127.0.0.1:8088` by default. If you have already
-configured a channel, CoPaw will reply there; otherwise you can add one after
-this step via [Channels](./channels).
+The server listens on `127.0.0.1:8088` by default. Open that URL in your browser to access the Console. **API keys, models, channels, heartbeat, and other settings can all be configured there** — no need to run `copaw init` first.
+
+> **Optional: `copaw init`** — For interactive setup (security notice, heartbeat interval, target, active hours, etc.), run `copaw init`. See [CLI - Getting started](./cli#getting-started).
 
 ---
 
@@ -111,7 +90,7 @@ pip install copaw
 Optional: create and activate a virtualenv first (`python -m venv .venv`, then
 `source .venv/bin/activate` on Linux/macOS or `.venv\Scripts\Activate.ps1` on Windows). This installs the `copaw` command.
 
-Then follow [Step 2: Init](#step-2-init) and [Step 3: Start the server](#step-3-start-the-server) above.
+Then follow [Step 2: Start the server](#step-2-start-the-server) above.
 
 ---
 
@@ -151,6 +130,24 @@ curl -N -X POST "http://localhost:8088/api/agent/process" \
 
 Use the same `session_id` for multi-turn.
 
+**Verify config API:**
+
+```bash
+curl "http://localhost:8088/api/config/channels"
+```
+
+**Quick local model trial (optional):**
+
+If you have `pip install 'copaw[llamacpp]'` or `pip install 'copaw[mlx]'`:
+
+```bash
+copaw models download Qwen/Qwen2-0.5B-Instruct-GGUF --source modelscope
+copaw models config   # Select llamacpp provider, choose the downloaded model
+copaw app
+```
+
+See [Local Models](./local-models) for details.
+
 ---
 
 ## What to do next
@@ -163,3 +160,4 @@ Use the same `session_id` for multi-turn.
 - **More commands** — [CLI](./cli) (interactive init, cron jobs, clean),
   [Skills](./skills).
 - **Change working dir or config path** — [Config & working dir](./config).
+- **Use local models (no API key)** — [Local Models](./local-models).

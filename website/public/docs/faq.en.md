@@ -73,21 +73,13 @@ After upgrading, restart the service with `copaw app`.
 
 ### How to initialize and start CoPaw service
 
-Recommended quick initialization:
-
-```bash
-copaw init --defaults
-```
-
-Start service:
+After install, start the service directly:
 
 ```bash
 copaw app
 ```
 
-The default Console URL is `http://127.0.0.1:8088/`. After quick init, you can
-open Console and customize settings. See
-[Quick Start](https://copaw.agentscope.io/docs/quickstart).
+The default Console URL is `http://127.0.0.1:8088/`. **API keys, models, channels, and other settings can all be configured there** — no need to run `copaw init` first. Optional: run `copaw init` for interactive setup. See [Quick Start](https://copaw.agentscope.io/docs/quickstart).
 
 ### Open-source repository
 

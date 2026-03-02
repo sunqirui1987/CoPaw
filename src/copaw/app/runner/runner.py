@@ -3,6 +3,7 @@
 import asyncio
 import json
 import logging
+import re
 from pathlib import Path
 
 from agentscope.pipeline import stream_printing_messages
@@ -148,6 +149,22 @@ class AgentRunner(Runner):
                 await agent.interrupt()
             raise
         except Exception as e:
+            # Provide user-friendly message for common API capacity errors
+            err_str = str(e).lower()
+            if "no available channels" in err_str or "no available capacity" in err_str:
+                model_hint = ""
+                if "for model" in err_str:
+                    try:
+                        m = re.search(r"for model\s+([^\s\)]+)", str(e), re.I)
+                        if m:
+                            model_hint = f" ({m.group(1)})"
+                    except Exception:
+                        pass
+                friendly = (
+                    f"模型{model_hint}当前无可用通道或容量已满，请稍后重试或切换到其他模型。"
+                    f" (Model{model_hint} has no available channels; try again later or switch model.)"
+                )
+                e.args = (friendly,) + e.args[1:]
             debug_dump_path = write_query_error_dump(
                 request=request,
                 exc=e,
