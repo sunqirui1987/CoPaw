@@ -25,7 +25,7 @@ interface ChannelDrawerProps {
 }
 
 // DingTalk doc URL
-const dingtalkDocUrl = "https://copaw.agentscope.io/docs/channels";
+const dingtalkDocUrl = "https://aicraw.agentscope.io/docs/channels";
 
 export function ChannelDrawer({
   open,
@@ -111,7 +111,7 @@ export function ChannelDrawer({
               <Input placeholder="Optional" />
             </Form.Item>
             <Form.Item name="media_dir" label="Media Dir">
-              <Input placeholder="~/.copaw/media" />
+              <Input placeholder="~/.aicraw/media" />
             </Form.Item>
           </>
         );

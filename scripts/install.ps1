@@ -1,8 +1,8 @@
-# CoPaw Installer for Windows
+# Aicraw Installer for Windows
 # Usage: irm <url>/install.ps1 | iex
 #    or: .\install.ps1 [-Version X.Y.Z] [-FromSource [DIR]] [-Extras "llamacpp,mlx"]
 #
-# Installs CoPaw into ~/.copaw with a uv-managed Python environment.
+# Installs Aicraw into ~/.aicraw with a uv-managed Python environment.
 # Users do NOT need Python pre-installed — uv handles everything.
 #
 # The entire script is wrapped in & { ... } @args so that `irm | iex` works
@@ -20,22 +20,22 @@ param(
 $ErrorActionPreference = "Stop"
 
 # ── Defaults ──────────────────────────────────────────────────────────────────
-$CopawHome = if ($env:COPAW_HOME) { $env:COPAW_HOME } else { Join-Path $HOME ".copaw" }
-$CopawVenv = Join-Path $CopawHome "venv"
-$CopawBin = Join-Path $CopawHome "bin"
+$AicrawHome = if ($env:AICRAW_HOME) { $env:AICRAW_HOME } else { Join-Path $HOME ".aicraw" }
+$AicrawVenv = Join-Path $AicrawHome "venv"
+$AicrawBin = Join-Path $AicrawHome "bin"
 $PythonVersion = "3.12"
-$CopawRepo = "https://github.com/agentscope-ai/CoPaw.git"
+$AicrawRepo = "https://github.com/agentscope-ai/Aicraw.git"
 
 # ── Colors ────────────────────────────────────────────────────────────────────
-function Write-Info { param([string]$Message) Write-Host "[copaw] " -ForegroundColor Green -NoNewline; Write-Host $Message }
-function Write-Warn { param([string]$Message) Write-Host "[copaw] " -ForegroundColor Yellow -NoNewline; Write-Host $Message }
-function Write-Err  { param([string]$Message) Write-Host "[copaw] " -ForegroundColor Red -NoNewline; Write-Host $Message }
+function Write-Info { param([string]$Message) Write-Host "[aicraw] " -ForegroundColor Green -NoNewline; Write-Host $Message }
+function Write-Warn { param([string]$Message) Write-Host "[aicraw] " -ForegroundColor Yellow -NoNewline; Write-Host $Message }
+function Write-Err  { param([string]$Message) Write-Host "[aicraw] " -ForegroundColor Red -NoNewline; Write-Host $Message }
 function Stop-WithError { param([string]$Message) Write-Err $Message; exit 1 }
 
 # ── Help ──────────────────────────────────────────────────────────────────────
 if ($Help) {
     @"
-CoPaw Installer for Windows
+Aicraw Installer for Windows
 
 Usage: .\install.ps1 [OPTIONS]
 
@@ -48,14 +48,14 @@ Options:
   -Help                 Show this help
 
 Environment:
-  COPAW_HOME            Installation directory (default: ~/.copaw)
+  AICRAW_HOME           Installation directory (default: ~/.aicraw)
 "@
     exit 0
 }
 
-Write-Host "[copaw] " -ForegroundColor Green -NoNewline
-Write-Host "Installing CoPaw into " -NoNewline
-Write-Host "$CopawHome" -ForegroundColor White
+Write-Host "[aicraw] " -ForegroundColor Green -NoNewline
+Write-Host "Installing Aicraw into " -NoNewline
+Write-Host "$AicrawHome" -ForegroundColor White
 
 # ── Execution Policy Check ────────────────────────────────────────────────────
 $policy = Get-ExecutionPolicy
@@ -124,22 +124,22 @@ function Ensure-Uv {
 Ensure-Uv
 
 # ── Step 2: Create / update virtual environment ──────────────────────────────
-if (Test-Path $CopawVenv) {
+if (Test-Path $AicrawVenv) {
     Write-Info "Existing environment found, upgrading..."
 } else {
     Write-Info "Creating Python $PythonVersion environment..."
 }
 
-uv venv $CopawVenv --python $PythonVersion --quiet
+uv venv $AicrawVenv --python $PythonVersion --quiet
 if ($LASTEXITCODE -ne 0) { Stop-WithError "Failed to create virtual environment" }
 
-$VenvPython = Join-Path $CopawVenv "Scripts\python.exe"
+$VenvPython = Join-Path $AicrawVenv "Scripts\python.exe"
 if (-not (Test-Path $VenvPython)) { Stop-WithError "Failed to create virtual environment" }
 
 $pyVersion = & $VenvPython --version 2>&1
 Write-Info "Python environment ready ($pyVersion)"
 
-# ── Step 3: Install CoPaw ────────────────────────────────────────────────────
+# ── Step 3: Install Aicraw ────────────────────────────────────────────────────
 # Build extras suffix: "" or "[llamacpp,mlx]"
 $ExtrasSuffix = ""
 if ($Extras) {
@@ -153,7 +153,7 @@ function Prepare-Console {
     param([string]$RepoDir)
 
     $consoleSrc = Join-Path $RepoDir "console\dist"
-    $consoleDest = Join-Path $RepoDir "src\copaw\console"
+    $consoleDest = Join-Path $RepoDir "src\aicraw\console"
 
     # Already populated
     if (Test-Path (Join-Path $consoleDest "index.html")) { $script:ConsoleAvailable = $true; return }
@@ -218,19 +218,19 @@ function Prepare-Console {
 function Cleanup-Console {
     param([string]$RepoDir)
     if ($script:ConsoleCopied) {
-        $consoleDest = Join-Path $RepoDir "src\copaw\console"
+        $consoleDest = Join-Path $RepoDir "src\aicraw\console"
         if (Test-Path $consoleDest) {
             Remove-Item -Path "$consoleDest\*" -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
 }
 
-$VenvCopaw = Join-Path $CopawVenv "Scripts\copaw.exe"
+$VenvAicraw = Join-Path $AicrawVenv "Scripts\aicraw.exe"
 
 if ($FromSource) {
     if ($SourceDir) {
         $SourceDir = (Resolve-Path $SourceDir).Path
-        Write-Info "Installing CoPaw from local source: $SourceDir"
+        Write-Info "Installing Aicraw from local source: $SourceDir"
         Prepare-Console $SourceDir
         Write-Info "Installing package from source..."
         uv pip install "${SourceDir}${ExtrasSuffix}" --python $VenvPython --prerelease=allow
@@ -238,12 +238,12 @@ if ($FromSource) {
         Cleanup-Console $SourceDir
     } else {
         if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
-            Stop-WithError "git is required for -FromSource without a local directory. Please install Git from https://git-scm.com/ or pass a local path: .\install.ps1 -FromSource -SourceDir C:\path\to\CoPaw"
+            Stop-WithError "git is required for -FromSource without a local directory. Please install Git from https://git-scm.com/ or pass a local path: .\install.ps1 -FromSource -SourceDir C:\path\to\Aicraw"
         }
-        Write-Info "Installing CoPaw from source (GitHub)..."
-        $cloneDir = Join-Path $env:TEMP "copaw-install-$(Get-Random)"
+        Write-Info "Installing Aicraw from source (GitHub)..."
+        $cloneDir = Join-Path $env:TEMP "aicraw-install-$(Get-Random)"
         try {
-            git clone --depth 1 $CopawRepo $cloneDir
+            git clone --depth 1 $AicrawRepo $cloneDir
             if ($LASTEXITCODE -ne 0) { Stop-WithError "Failed to clone repository" }
             Prepare-Console $cloneDir
             Write-Info "Installing package from source..."
@@ -256,9 +256,9 @@ if ($FromSource) {
         }
     }
 } else {
-    $package = "copaw"
+    $package = "aicraw"
     if ($Version) {
-        $package = "copaw==$Version"
+        $package = "aicraw==$Version"
     }
 
     Write-Info "Installing ${package}${ExtrasSuffix} from PyPI..."
@@ -267,29 +267,29 @@ if ($FromSource) {
 }
 
 # Verify the CLI entry point exists
-if (-not (Test-Path $VenvCopaw)) { Stop-WithError "Installation failed: copaw CLI not found in venv" }
+if (-not (Test-Path $VenvAicraw)) { Stop-WithError "Installation failed: aicraw CLI not found in venv" }
 
-Write-Info "CoPaw installed successfully"
+Write-Info "Aicraw installed successfully"
 
 # Check console availability (for PyPI installs, check the installed package)
 if (-not $script:ConsoleAvailable) {
-    $consoleCheck = & $VenvPython -c "import importlib.resources, copaw; p=importlib.resources.files('copaw')/'console'/'index.html'; print('yes' if p.is_file() else 'no')" 2>&1
+    $consoleCheck = & $VenvPython -c "import importlib.resources, aicraw; p=importlib.resources.files('aicraw')/'console'/'index.html'; print('yes' if p.is_file() else 'no')" 2>&1
     if ($consoleCheck -eq "yes") { $script:ConsoleAvailable = $true }
 }
 
 # ── Step 4: Create wrapper script ────────────────────────────────────────────
-New-Item -ItemType Directory -Path $CopawBin -Force | Out-Null
+New-Item -ItemType Directory -Path $AicrawBin -Force | Out-Null
 
-$wrapperPath = Join-Path $CopawBin "copaw.ps1"
+$wrapperPath = Join-Path $AicrawBin "aicraw.ps1"
 $wrapperContent = @'
-# CoPaw CLI wrapper — delegates to the uv-managed environment.
+# Aicraw CLI wrapper — delegates to the uv-managed environment.
 $ErrorActionPreference = "Stop"
 
-$CopawHome = if ($env:COPAW_HOME) { $env:COPAW_HOME } else { Join-Path $HOME ".copaw" }
-$RealBin = Join-Path $CopawHome "venv\Scripts\copaw.exe"
+$AicrawHome = if ($env:AICRAW_HOME) { $env:AICRAW_HOME } else { Join-Path $HOME ".aicraw" }
+$RealBin = Join-Path $AicrawHome "venv\Scripts\aicraw.exe"
 
 if (-not (Test-Path $RealBin)) {
-    Write-Error "CoPaw environment not found at $CopawHome\venv"
+    Write-Error "Aicraw environment not found at $AicrawHome\venv"
     Write-Error "Please reinstall: irm <install-url> | iex"
     exit 1
 }
@@ -301,15 +301,15 @@ Set-Content -Path $wrapperPath -Value $wrapperContent -Encoding UTF8
 Write-Info "Wrapper created at $wrapperPath"
 
 # Also create a .cmd wrapper for use from cmd.exe
-$cmdWrapperPath = Join-Path $CopawBin "copaw.cmd"
+$cmdWrapperPath = Join-Path $AicrawBin "aicraw.cmd"
 $cmdWrapperContent = @"
 @echo off
-REM CoPaw CLI wrapper — delegates to the uv-managed environment.
-set "COPAW_HOME=%COPAW_HOME%"
-if "%COPAW_HOME%"=="" set "COPAW_HOME=%USERPROFILE%\.copaw"
-set "REAL_BIN=%COPAW_HOME%\venv\Scripts\copaw.exe"
+REM Aicraw CLI wrapper — delegates to the uv-managed environment.
+set "AICRAW_HOME=%AICRAW_HOME%"
+if "%AICRAW_HOME%"=="" set "AICRAW_HOME=%USERPROFILE%\.aicraw"
+set "REAL_BIN=%AICRAW_HOME%\venv\Scripts\aicraw.exe"
 if not exist "%REAL_BIN%" (
-    echo Error: CoPaw environment not found at %COPAW_HOME%\venv >&2
+    echo Error: Aicraw environment not found at %AICRAW_HOME%\venv >&2
     echo Please reinstall: irm ^<install-url^> ^| iex >&2
     exit /b 1
 )
@@ -321,21 +321,21 @@ Write-Info "CMD wrapper created at $cmdWrapperPath"
 
 # ── Step 5: Update PATH via User Environment Variable ────────────────────────
 $currentUserPath = [Environment]::GetEnvironmentVariable("Path", "User")
-if ($currentUserPath -notlike "*$CopawBin*") {
-    [Environment]::SetEnvironmentVariable("Path", "$CopawBin;$currentUserPath", "User")
-    $env:PATH = "$CopawBin;$env:PATH"
-    Write-Info "Added $CopawBin to user PATH"
+if ($currentUserPath -notlike "*$AicrawBin*") {
+    [Environment]::SetEnvironmentVariable("Path", "$AicrawBin;$currentUserPath", "User")
+    $env:PATH = "$AicrawBin;$env:PATH"
+    Write-Info "Added $AicrawBin to user PATH"
 } else {
-    Write-Info "$CopawBin already in PATH"
+    Write-Info "$AicrawBin already in PATH"
 }
 
 # ── Done ──────────────────────────────────────────────────────────────────────
 Write-Host ""
-Write-Host "CoPaw installed successfully!" -ForegroundColor Green
+Write-Host "Aicraw installed successfully!" -ForegroundColor Green
 Write-Host ""
 
 # Install summary
-Write-Host "  Install location:  " -NoNewline; Write-Host "$CopawHome" -ForegroundColor White
+Write-Host "  Install location:  " -NoNewline; Write-Host "$AicrawHome" -ForegroundColor White
 Write-Host "  Python:            " -NoNewline; Write-Host "$pyVersion" -ForegroundColor White
 if ($script:ConsoleAvailable) {
     Write-Host "  Console (web UI):  " -NoNewline; Write-Host "available" -ForegroundColor Green
@@ -347,11 +347,11 @@ Write-Host ""
 
 Write-Host "To get started, open a new terminal and run:"
 Write-Host ""
-Write-Host "  copaw app" -ForegroundColor White -NoNewline; Write-Host "        # start CoPaw (configure in browser)"
-Write-Host "  copaw init" -ForegroundColor White -NoNewline; Write-Host "       # optional: interactive setup"
+Write-Host "  aicraw app" -ForegroundColor White -NoNewline; Write-Host "        # start Aicraw (configure in browser)"
+Write-Host "  aicraw init" -ForegroundColor White -NoNewline; Write-Host "       # optional: interactive setup"
 Write-Host ""
 Write-Host "To upgrade later, re-run this installer."
 Write-Host "To uninstall, run: " -NoNewline
-Write-Host "copaw uninstall" -ForegroundColor White
+Write-Host "aicraw uninstall" -ForegroundColor White
 
 } @args

@@ -4,6 +4,7 @@ body {
   overflow: hidden;
   margin: 0;
   padding: 0;
+  background: #f5f6f8;
 }
 
 #root {
@@ -15,10 +16,12 @@ body {
   min-height: 100vh;
   max-height: 100vh;
   overflow: hidden;
+  background: #f5f6f8;
 }
 
 .ant-layout-content {
   overflow: hidden;
+  background: #f5f6f8;
 }
 
 .page-container {
@@ -36,6 +39,29 @@ body {
   flex: 1 1 auto;
   overflow: auto;
   padding: 0 24px 24px 24px;
+}
+
+/* Light theme scrollbar */
+.page-content::-webkit-scrollbar,
+.table-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.page-content::-webkit-scrollbar-track,
+.table-wrapper::-webkit-scrollbar-track {
+  background: #e8eaed;
+}
+
+.page-content::-webkit-scrollbar-thumb,
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #b8bcc4;
+  border-radius: 4px;
+}
+
+.page-content::-webkit-scrollbar-thumb:hover,
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
 
 .table-container {
@@ -57,7 +83,7 @@ body {
   padding: 0;
 }
 
-/* Welcome avatar: full tall SVG. Class is CoPaw-avatar (no "ant"). */
+/* Welcome avatar: full tall SVG. Class is Aicraw-avatar (no "ant"). */
 [class*="chat-anywhere-welcome-default"] [class*="-avatar"],
 [class*="message-list-welcome"] [class*="welcome-default"] [class*="-avatar"] {
   width: 36px !important;

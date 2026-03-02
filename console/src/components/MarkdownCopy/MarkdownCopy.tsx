@@ -134,7 +134,7 @@ export function MarkdownCopy({
       padding: 16,
       height: "100%",
       overflow: "auto",
-      backgroundColor: "#fff",
+      backgroundColor: "var(--colorBgContainer, #1f1f1f)",
       borderRadius: 6,
       ...markdownViewerProps.style,
     },

@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         less: {
           javascriptEnabled: true,
+          additionalData: `@import "${path.resolve(process.cwd(), "src/styles/variables.less").replace(/\\\\/g, "/")}";`,
         },
       },
     },

@@ -14,6 +14,7 @@ const keyToLabel: Record<string, string> = {
   "agent-config": "nav.agentConfig",
   workspace: "nav.workspace",
   models: "nav.models",
+  "general-config": "nav.generalConfig",
   environments: "nav.environments",
 };
 
@@ -32,11 +33,11 @@ export default function Header({ selectedKey }: HeaderProps) {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        background: "#fff",
-        borderBottom: "1px solid #f0f0f0",
+        background: "#141414",
+        borderBottom: "1px solid #303030",
       }}
     >
-      <span style={{ fontSize: 18, fontWeight: 500 }}>
+      <span style={{ fontSize: 18, fontWeight: 500, color: "rgba(255,255,255,0.85)" }}>
         {t(keyToLabel[selectedKey] || "nav.chat")}
       </span>
       <LanguageSwitcher />

@@ -4,11 +4,11 @@
 }
 
 .selectedRow > td {
-  background-color: #e6f7ff !important;
+  background-color: rgba(124, 122, 255, 0.15) !important;
 }
 
 .selectedRow:hover > td {
-  background-color: #bae7ff !important;
+  background-color: rgba(124, 122, 255, 0.25) !important;
 }
 
 .header {
@@ -31,7 +31,7 @@
 
 .description {
   margin: 0;
-  color: #999;
+  color: @text-secondary;
   font-size: 14px;
 }
 
@@ -46,16 +46,16 @@
 :global(.sessions-filter-input) {
   .ant-input {
     border-radius: 8px !important;
-    border: 1px solid #d9d9d9 !important;
+    border: 1px solid @border-color !important;
     transition: all 0.2s ease-in-out !important;
 
     &:hover {
-      border-color: #615ced !important;
+      border-color: @color-primary !important;
     }
 
     &:focus {
-      border-color: #615ced !important;
-      box-shadow: 0 0 0 2px rgba(97, 92, 237, 0.2) !important;
+      border-color: @color-primary !important;
+      box-shadow: 0 0 0 2px rgba(124, 122, 255, 0.2) !important;
     }
   }
 }
@@ -63,17 +63,17 @@
 :global(.sessions-filter-select) {
   .ant-select-selector {
     border-radius: 8px !important;
-    border: 1px solid #d9d9d9 !important;
+    border: 1px solid @border-color !important;
     transition: all 0.2s ease-in-out !important;
 
     &:hover {
-      border-color: #615ced !important;
+      border-color: @color-primary !important;
     }
 
     &:focus,
     &:focus-within {
-      border-color: #615ced !important;
-      box-shadow: 0 0 0 2px rgba(97, 92, 237, 0.2) !important;
+      border-color: @color-primary !important;
+      box-shadow: 0 0 0 2px rgba(124, 122, 255, 0.2) !important;
     }
   }
 }

@@ -78,7 +78,7 @@
     "pleaseInputName": "请输入技能名称",
     "pleaseInputContent": "请输入技能内容",
     "skillNamePlaceholder": "例如：weather_query",
-    "contentPlaceholder": "---\nname: <技能名称>（必填）\ndescription: <技能功能描述>（必填）\nmetadata: { \"copaw\": { \"emoji\": \"🔧\" } }\n---\n\n技能实现内容...\n\n# 示例：\n# ---\n# name: cron\n# description: 通过 copaw 命令管理定时任务 - 创建、查询、暂停、恢复、删除任务\n# metadata: { \"copaw\": { \"emoji\": \"⏰\" } }\n# ---",
+    "contentPlaceholder": "---\nname: <技能名称>（必填）\ndescription: <技能功能描述>（必填）\nmetadata: { \"aicraw\": { \"emoji\": \"🔧\" } }\n---\n\n技能实现内容...\n\n# 示例：\n# ---\n# name: cron\n# description: 通过 aicraw 命令管理定时任务 - 创建、查询、暂停、恢复、删除任务\n# metadata: { \"aicraw\": { \"emoji\": \"⏰\" } }\n# ---",
     "createSuccess": "技能创建成功",
     "createFailed": "技能创建失败",
     "deleteConfirm": "确定要删除此技能吗？",
@@ -351,7 +351,7 @@
   },
   "generalConfig": {
     "title": "通用配置",
-    "description": "配置心跳、显示选项和语言（等同 copaw init 中的配置）",
+    "description": "配置心跳、显示选项和语言（等同 aicraw init 中的配置）",
     "heartbeatSection": "心跳",
     "heartbeatEvery": "心跳间隔",
     "heartbeatEveryTooltip": "执行间隔，如 30m、1h、2h30m",
@@ -379,7 +379,7 @@
   "init": {
     "title": "首次设置",
     "securityTitle": "安全提示 — 请阅读",
-    "securityDesc": "CoPaw 是运行在您本地的个人助手，可连接钉钉、飞书、QQ、Discord、iMessage 等频道，并运行读取文件、执行命令、调用外部 API 的技能。默认是单用户边界。若启用工具，恶意或混淆的提示可能导致智能体执行不安全操作。\n\n若多人可向同一 CoPaw 实例发送消息且工具已启用，他们将共享相同的委托权限（文件、命令、密钥等）。\n\n建议：限制可触发智能体的频道和用户；多用户场景使用独立配置；以最小权限运行技能；定期检查配置和技能。",
+    "securityDesc": "Aicraw 是运行在您本地的个人助手，可连接钉钉、飞书、QQ、Discord、iMessage 等频道，并运行读取文件、执行命令、调用外部 API 的技能。默认是单用户边界。若启用工具，恶意或混淆的提示可能导致智能体执行不安全操作。\n\n若多人可向同一 Aicraw 实例发送消息且工具已启用，他们将共享相同的委托权限（文件、命令、密钥等）。\n\n建议：限制可触发智能体的频道和用户；多用户场景使用独立配置；以最小权限运行技能；定期检查配置和技能。",
     "acceptSecurity": "我已阅读并理解",
     "startConfig": "开始配置",
     "configSteps": "请完成以下配置以开始使用：",

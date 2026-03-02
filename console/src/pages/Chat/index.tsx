@@ -13,7 +13,7 @@ import defaultConfig, { DefaultConfig } from "./OptionsPanel/defaultConfig";
 import Weather from "./Weather";
 import { getApiUrl, getApiToken } from "../../api/config";
 import { providerApi } from "../../api/modules/provider";
-import "./index.module.less";
+import styles from "./index.module.less";
 
 interface CustomWindow extends Window {
   currentSessionId?: string;
@@ -137,8 +137,10 @@ export default function ChatPage() {
   }, [optionsConfig]);
 
   return (
-    <div style={{ height: "100%", width: "100%" }}>
-      <AgentScopeRuntimeWebUI options={options} />
+    <div className={styles.chatPage}>
+      <div className={styles.chatContainer}>
+        <AgentScopeRuntimeWebUI options={options} />
+      </div>
 
       <Modal open={showModelPrompt} closable={false} footer={null} width={480}>
         <Result

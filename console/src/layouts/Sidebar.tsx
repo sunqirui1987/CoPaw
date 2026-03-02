@@ -39,9 +39,15 @@ const keyToPath: Record<string, string> = {
 
 interface SidebarProps {
   selectedKey: string;
+  collapsed?: boolean;
+  onCollapse?: (collapsed: boolean) => void;
 }
 
-export default function Sidebar({ selectedKey }: SidebarProps) {
+export default function Sidebar({
+  selectedKey,
+  collapsed = false,
+  onCollapse,
+}: SidebarProps) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [openKeys, setOpenKeys] = useState<string[]>([
@@ -148,9 +154,13 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
   return (
     <Sider
       width={260}
+      collapsedWidth={80}
+      collapsible
+      collapsed={collapsed}
+      onCollapse={(c) => onCollapse?.(c)}
       style={{
-        background: "#fff",
-        borderRight: "1px solid #f0f0f0",
+        background: "#141414",
+        borderRight: "1px solid #303030",
       }}
     >
       <div
@@ -158,21 +168,21 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
           height: 64,
           display: "flex",
           alignItems: "flex-end",
-          padding: "0 24px 10px",
+          padding: collapsed ? "0 16px 10px" : "0 24px 10px",
           fontWeight: 600,
           gap: 8,
         }}
       >
         <img
           src="/logo.png"
-          alt="CoPaw"
+          alt="Aicraw"
           style={{ height: 32, width: "auto" }}
         />
-        {version && (
+        {!collapsed && version && (
           <span
             style={{
               fontSize: 11,
-              color: "#bbb",
+              color: "#8c8c8c",
               fontWeight: 400,
               lineHeight: 1,
             }}
@@ -183,9 +193,10 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
       </div>
       <Menu
         mode="inline"
+        inlineCollapsed={collapsed}
         selectedKeys={[selectedKey]}
-        openKeys={openKeys}
-        onOpenChange={(keys) => setOpenKeys(keys as string[])}
+        openKeys={collapsed ? [] : openKeys}
+        onOpenChange={(keys) => !collapsed && setOpenKeys(keys as string[])}
         onClick={(info: { key: string | number }) => {
           const key = String(info.key);
           const path = keyToPath[key];
@@ -194,6 +205,11 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
           }
         }}
         items={menuItems}
+        style={{
+          height: "calc(100vh - 64px)",
+          borderRight: "none",
+          background: "transparent",
+        }}
       />
     </Sider>
   );

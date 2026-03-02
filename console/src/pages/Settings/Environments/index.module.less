@@ -16,7 +16,7 @@
 
 .sectionDesc {
   margin: 0;
-  color: #999;
+  color: @text-secondary;
   font-size: 14px;
 }
 
@@ -32,28 +32,28 @@
 
 .stateText {
   font-size: 14px;
-  color: #999;
+  color: @text-secondary;
 }
 
 .stateTextError {
   font-size: 14px;
-  color: #ff4d4f;
+  color: @color-error;
   margin-bottom: 4px;
 }
 
 /* ---- Table card ---- */
 
 .tableCard {
-  background: #fff;
-  border: 1px solid #e8e8e8;
+  background: @card-bg;
+  border: 1px solid @border-color;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    border-color: #d9d9d9;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    border-color: @border-color-secondary;
   }
 }
 
@@ -64,12 +64,12 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 24px;
-  background: #fafafa;
-  border-bottom: 1px solid #f0f0f0;
+  background: @bg-elevated;
+  border-bottom: 1px solid @border-color;
   transition: background 0.2s ease-in-out;
 
   &:hover {
-    background: #f5f5f5;
+    background: @card-hover-bg;
   }
 }
 
@@ -81,7 +81,7 @@
 
 .toolbarCount {
   font-size: 13px;
-  color: #999;
+  color: @text-secondary;
   user-select: none;
 }
 
@@ -105,7 +105,7 @@
   align-items: center;
   gap: 16px;
   padding: 12px 24px;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid @border-color;
   transition: all 0.2s ease-in-out;
   flex-wrap: wrap;
 
@@ -114,26 +114,18 @@
   }
 
   &:hover {
-    background: #fafbfc;
+    background: @card-hover-bg;
     transform: translateX(2px);
   }
 }
 
 .envRowSelected {
-  background: #e6f4ff;
-  border-left: 3px solid #1677ff;
+  background: rgba(124, 122, 255, 0.15);
+  border-left: 3px solid @color-primary;
 
   &:hover {
-    background: #d6eaff;
+    background: rgba(124, 122, 255, 0.2);
     transform: translateX(2px);
-  }
-}
-
-.envRowSelected {
-  background: #e6f4ff;
-
-  &:hover {
-    background: #d6eaff;
   }
 }
 
@@ -156,25 +148,25 @@
   flex: 1 1 0;
   min-width: 180px;
   height: 42px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid @border-color;
   border-radius: 8px;
-  background: #fff;
+  background: @input-bg;
   overflow: hidden;
   transition: all 0.2s ease-in-out;
 
   &:focus-within {
-    border-color: #615ced;
-    box-shadow: 0 0 0 2px rgba(97, 92, 237, 0.2);
+    border-color: @color-primary;
+    box-shadow: 0 0 0 2px rgba(124, 122, 255, 0.2);
     transform: translateY(-1px);
   }
 }
 
 .inputGroupError {
-  border-color: #ff4d4f;
+  border-color: @color-error;
   animation: shake 0.3s ease-in-out;
 
   &:focus-within {
-    border-color: #ff4d4f;
+    border-color: @color-error;
     box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
   }
 }
@@ -199,19 +191,19 @@
   padding: 0 14px;
   font-size: 14px;
   font-weight: 500;
-  color: #666;
+  color: @text-tertiary;
   white-space: nowrap;
   user-select: none;
   line-height: 42px;
-  border-right: 1px solid #f0f0f0;
-  background: #fafafa;
+  border-right: 1px solid @border-color;
+  background: @disabled-bg;
   min-width: 60px;
   text-align: center;
   transition: all 0.2s ease-in-out;
 
   .inputGroup:focus-within & {
-    color: #615ced;
-    background: #f0f0ff;
+    color: @color-primary;
+    background: rgba(124, 122, 255, 0.15);
   }
 }
 
@@ -269,21 +261,21 @@
   background: transparent;
   cursor: pointer;
   font-size: 16px;
-  color: #c0c0c0;
+  color: @text-tertiary;
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    color: #615ced;
-    background: #f0f0ff;
+    color: @color-primary;
+    background: rgba(124, 122, 255, 0.15);
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(97, 92, 237, 0.15);
+    box-shadow: 0 2px 8px rgba(124, 122, 255, 0.15);
   }
 }
 
 .rowIconBtnDanger {
   &:hover {
-    color: #ff4d4f;
-    background: #fff1f0;
+    color: @color-error;
+    background: rgba(255, 77, 79, 0.15);
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(255, 77, 79, 0.15);
   }
@@ -294,7 +286,7 @@
 .rowError {
   flex-basis: 100%;
   font-size: 12px;
-  color: #ff4d4f;
+  color: @color-error;
   padding-left: 36px;
   /* align with fields after checkbox */
   margin-top: -2px;
@@ -305,12 +297,12 @@
 .addBar {
   display: flex;
   padding: 16px 24px;
-  border-top: 1px solid #f0f0f0;
-  background: #fafafa;
+  border-top: 1px solid @border-color;
+  background: @bg-elevated;
   transition: background 0.2s ease-in-out;
 
   &:hover {
-    background: #f5f5f5;
+    background: @card-hover-bg;
   }
 }
 
@@ -319,20 +311,20 @@
   align-items: center;
   gap: 8px;
   padding: 8px 20px;
-  border: 1px dashed #d9d9d9;
+  border: 1px dashed @border-color;
   border-radius: 8px;
   background: transparent;
   cursor: pointer;
   font-size: 14px;
-  color: #999;
+  color: @text-secondary;
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    color: #615ced;
-    border-color: #615ced;
-    background: #f0f0ff;
+    color: @color-primary;
+    border-color: @color-primary;
+    background: rgba(124, 122, 255, 0.15);
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(97, 92, 237, 0.15);
+    box-shadow: 0 2px 8px rgba(124, 122, 255, 0.15);
   }
 
   svg {
@@ -348,7 +340,7 @@
   align-items: center;
   gap: 8px;
   padding: 48px 24px;
-  color: #bbb;
+  color: @text-tertiary;
   font-size: 14px;
 }
 

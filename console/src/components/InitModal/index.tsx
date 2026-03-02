@@ -100,7 +100,7 @@ export default function InitModal({ open, onClose }: InitModalProps) {
               {t("init.later")}
             </Button>
           </div>
-          <p style={{ marginTop: 16, color: "#666", fontSize: 12 }}>
+          <p style={{ marginTop: 16, color: "rgba(255,255,255,0.45)", fontSize: 12 }}>
             {t("init.afterConfigHint")}
           </p>
         </>

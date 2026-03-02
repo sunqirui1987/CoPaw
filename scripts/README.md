@@ -8,21 +8,12 @@ Run from **repo root**.
 bash scripts/wheel_build.sh
 ```
 
-- Builds the console frontend (`console/`), copies `console/dist` to `src/copaw/console/dist`, then builds the wheel. Output: `dist/*.whl`.
+- Builds the console frontend (`console/`), copies `console/dist` to `src/aicraw/console/dist`, then builds the wheel. Output: `dist/*.whl`.
 
-## Build website
-
-```bash
-bash scripts/website_build.sh
-```
-
-- Installs dependencies (pnpm or npm) and runs the Vite build. Output: `website/dist/`.
-
-## Build Docker image
+## Build desktop app
 
 ```bash
-bash scripts/docker_build.sh [IMAGE_TAG] [EXTRA_ARGS...]
+bash scripts/desktop_build.sh
 ```
 
-- Default tag: `copaw:latest`. Uses `deploy/Dockerfile` (multi-stage: builds console then Python app).
-- Example: `bash scripts/docker_build.sh myreg/copaw:v1 --no-cache`.
+- Builds the console frontend, copies to `src/aicraw/console/`, then runs PyInstaller. Output: `dist/Aicraw/`.
