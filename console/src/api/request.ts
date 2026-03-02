@@ -1,4 +1,5 @@
-import { getApiUrl, getApiToken } from "./config";
+import { getApiUrl } from "./config";
+import { getApiToken } from "./token";
 
 function buildHeaders(extra?: HeadersInit): HeadersInit {
   const headers: HeadersInit = {

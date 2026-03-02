@@ -1,4 +1,15 @@
 {
+  "login": {
+    "title": "LinCraw Console",
+    "subtitle": "Enter your API Key to sign in",
+    "apiKeyLabel": "API Key",
+    "apiKeyRequired": "Please enter API Key",
+    "apiKeyInvalidPrefix": "API Key must start with sk-, get it from Qiniu Cloud Console",
+    "submit": "Sign in",
+    "failed": "Login failed",
+    "hint": "API Key must start with sk-, get it from Qiniu Cloud Console",
+    "logout": "Log out"
+  },
   "common": {
     "save": "Save",
     "reset": "Reset",
@@ -218,6 +229,12 @@
     "variables": "variables"
   },
   "models": {
+    "modelSquareTitle": "Qiniu Model Square",
+    "modelSquareDescription": "Use your login Qiniu API Key to select LLM models from MaaS platform, including DeepSeek, Kimi, GLM and more.",
+    "modelSquareConfigureFirst": "Please configure {{name}} API key first to view and select models.",
+    "modelSquareLoginHint": "Login {{name}} API Key is your Qiniu MaaS API Key. Please log in again and refresh.",
+    "activeModel": "Active",
+    "useModel": "Use this model",
     "llmConfiguration": "LLM Configuration",
     "providersTitle": "Providers",
     "providersDescription": "Configure API keys and endpoints for each provider.",

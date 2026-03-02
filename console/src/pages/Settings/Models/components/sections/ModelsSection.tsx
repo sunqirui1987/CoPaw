@@ -53,12 +53,18 @@ export function ModelsSection({
   );
 
   useEffect(() => {
-    if (currentSlot) {
-      setSelectedProviderId(currentSlot.provider_id || undefined);
-      setSelectedModel(currentSlot.model || undefined);
+    if (currentSlot?.provider_id && currentSlot?.model) {
+      setSelectedProviderId(currentSlot.provider_id);
+      setSelectedModel(currentSlot.model);
+    } else if (eligible.length === 1) {
+      // Only Qiniu MaaS: default select it and first model
+      const single = eligible[0];
+      setSelectedProviderId(single.id);
+      const firstModel = single.models?.[0]?.id;
+      if (firstModel) setSelectedModel(firstModel);
     }
     setDirty(false);
-  }, [currentSlot?.provider_id, currentSlot?.model]);
+  }, [currentSlot?.provider_id, currentSlot?.model, eligible]);
 
   const chosenProvider = providers.find((p) => p.id === selectedProviderId);
   const modelOptions = chosenProvider?.models ?? [];
@@ -121,16 +127,22 @@ export function ModelsSection({
       <div className={styles.slotForm}>
         <div className={styles.slotField}>
           <label className={styles.slotLabel}>{t("models.provider")}</label>
-          <Select
-            style={{ width: "100%" }}
-            placeholder={t("models.selectProvider")}
-            value={selectedProviderId}
-            onChange={handleProviderChange}
-            options={eligible.map((p) => ({
-              value: p.id,
-              label: p.name,
-            }))}
-          />
+          {eligible.length <= 1 ? (
+            <div className={styles.slotProviderFixed}>
+              {eligible[0]?.name ?? t("models.selectProvider")}
+            </div>
+          ) : (
+            <Select
+              style={{ width: "100%" }}
+              placeholder={t("models.selectProvider")}
+              value={selectedProviderId}
+              onChange={handleProviderChange}
+              options={eligible.map((p) => ({
+                value: p.id,
+                label: p.name,
+              }))}
+            />
+          )}
         </div>
 
         <div className={styles.slotField}>

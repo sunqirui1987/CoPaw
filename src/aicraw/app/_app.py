@@ -17,7 +17,7 @@ from ..config import (  # pylint: disable=no-name-in-module
     ConfigWatcher,
 )
 from ..config.utils import get_jobs_path, get_chats_path, get_config_path
-from ..constant import DOCS_ENABLED, LOG_LEVEL_ENV, CORS_ORIGINS
+from ..constant import CONSOLE_REQUIRE_AUTH, DOCS_ENABLED, LOG_LEVEL_ENV, CORS_ORIGINS
 from ..__version__ import __version__
 from ..utils.logging import setup_logger
 from .channels import ChannelManager  # pylint: disable=no-name-in-module
@@ -146,6 +146,26 @@ app = FastAPI(
     openapi_url="/openapi.json" if DOCS_ENABLED else None,
 )
 
+# Console auth middleware: require Authorization for /api/* when CONSOLE_REQUIRE_AUTH
+if CONSOLE_REQUIRE_AUTH:
+
+    @app.middleware("http")
+    async def _console_auth_middleware(request, call_next):
+        path = request.url.path
+        if path.startswith("/api/"):
+            if path in ("/api/auth/login", "/api/version"):
+                return await call_next(request)
+            auth = request.headers.get("Authorization")
+            if not auth or not auth.startswith("Bearer ") or not auth[7:].strip():
+                from fastapi.responses import JSONResponse
+
+                return JSONResponse(
+                    status_code=401,
+                    content={"detail": "Unauthorized", "message": "请先登录"},
+                )
+        return await call_next(request)
+
+
 # Apply CORS middleware if CORS_ORIGINS is set
 if CORS_ORIGINS:
     origins = [o.strip() for o in CORS_ORIGINS.split(",") if o.strip()]
@@ -206,18 +226,9 @@ app.include_router(
     tags=["agent"],
 )
 
-# Mount console: root static files (logo.png etc.) then assets, then SPA
-# fallback.
+# Mount console: root static files then assets, then SPA fallback.
 if os.path.isdir(_CONSOLE_STATIC_DIR):
     _console_path = Path(_CONSOLE_STATIC_DIR)
-
-    @app.get("/logo.png")
-    def _console_logo():
-        f = _console_path / "logo.png"
-        if f.is_file():
-            return FileResponse(f, media_type="image/png")
-
-        raise HTTPException(status_code=404, detail="Not Found")
 
     @app.get("/aicraw-symbol.svg")
     def _console_icon():

@@ -3,6 +3,7 @@ import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import ChatLayout from "../ChatLayout";
 import ConsoleLayout from "../ConsoleLayout";
 import Chat from "../../pages/Chat";
+import Login from "../../pages/Login";
 import ChannelsPage from "../../pages/Control/Channels";
 import SessionsPage from "../../pages/Control/Sessions";
 import CronJobsPage from "../../pages/Control/CronJobs";
@@ -13,17 +14,40 @@ import MCPPage from "../../pages/Agent/MCP";
 import ModelsPage from "../../pages/Settings/Models";
 import GeneralConfigPage from "../../pages/Settings/GeneralConfig";
 import EnvironmentsPage from "../../pages/Settings/Environments";
+import { useAuthStore, type AuthState } from "../../stores/auth";
 
 export default function MainLayout() {
   const location = useLocation();
   const navigate = useNavigate();
+  const isAuthenticated = useAuthStore((s: AuthState) => s.isAuthenticated);
+  const apiKey = useAuthStore((s: AuthState) => s.apiKey);
+  const checkAuth = useAuthStore((s: AuthState) => s.checkAuth);
+  const isLoginPage = location.pathname === "/login";
   const isChat = location.pathname === "/chat" || location.pathname === "/";
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   useEffect(() => {
     if (location.pathname === "/") {
       navigate("/chat", { replace: true });
     }
   }, [location.pathname, navigate]);
+
+  // Auth guard: require login for all pages except /login
+  const hasAuth = isAuthenticated || !!apiKey;
+  useEffect(() => {
+    if (!hasAuth && !isLoginPage) {
+      navigate("/login", { replace: true });
+    } else if (hasAuth && isLoginPage) {
+      navigate("/chat", { replace: true });
+    }
+  }, [hasAuth, isLoginPage, navigate]);
+
+  if (!hasAuth) {
+    return <Login />;
+  }
 
   if (isChat) {
     return (

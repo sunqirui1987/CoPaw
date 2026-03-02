@@ -1,6 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { LogOut } from "lucide-react";
 import LanguageSwitcher from "../components/LanguageSwitcher";
+import { useAuthStore } from "../stores/auth";
 import ConsoleCronBubble from "../components/ConsoleCronBubble";
 import InitModal from "../components/InitModal";
 import { useState, useEffect } from "react";
@@ -93,6 +95,7 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
+  const logout = useAuthStore((s: { logout: () => void }) => s.logout);
   const [showInitModal, setShowInitModal] = useState(false);
   const [version, setVersion] = useState("");
 
@@ -117,7 +120,7 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
     <div className={styles.consoleLayout}>
       <header className={styles.consoleHeader}>
         <div className={styles.headerLeft}>
-          <img src="/logo.png" alt="Aicraw" className={styles.logo} />
+          <span className={styles.logo}>LinCraw</span>
           {version && (
             <span className={styles.version}>v{version}</span>
           )}
@@ -160,6 +163,20 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
             </div>
           </div>
         ))}
+        <div className={styles.navGroupLogout}>
+          <button
+            type="button"
+            className={styles.navItem}
+            onClick={() => {
+              logout();
+              navigate("/login");
+            }}
+            title={t("login.logout")}
+          >
+            <LogOut size={18} />
+            <span>{t("login.logout")}</span>
+          </button>
+        </div>
       </nav>
 
       <main className={styles.consoleContent}>{children}</main>

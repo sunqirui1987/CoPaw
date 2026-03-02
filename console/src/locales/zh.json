@@ -1,4 +1,15 @@
 {
+  "login": {
+    "title": "LinCraw 控制台",
+    "subtitle": "请输入您的 API Key 登录",
+    "apiKeyLabel": "API Key",
+    "apiKeyRequired": "请输入 API Key",
+    "apiKeyInvalidPrefix": "API Key 必须以 sk- 开头，请在七牛云控制台获取",
+    "submit": "登录",
+    "failed": "登录失败",
+    "hint": "API Key 须以 sk- 开头，可在七牛云控制台获取",
+    "logout": "退出登录"
+  },
   "common": {
     "save": "保存",
     "reset": "重置",
@@ -218,6 +229,12 @@
     "variables": "变量"
   },
   "models": {
+    "modelSquareTitle": "七牛模型广场",
+    "modelSquareDescription": "使用登入的七牛云 API Key，从 MaaS 平台选择大语言模型，支持 DeepSeek、Kimi、GLM 等主流模型。",
+    "modelSquareConfigureFirst": "请先配置 {{name}} 的 API 密钥以查看和选择模型。",
+    "modelSquareLoginHint": "登入的 {{name}} API Key 即七牛云 MaaS API Key，请重新登录后刷新页面。",
+    "activeModel": "当前使用",
+    "useModel": "使用此模型",
     "llmConfiguration": "LLM 配置",
     "providersTitle": "提供商",
     "providersDescription": "为每个提供商配置 API 密钥和端点。",

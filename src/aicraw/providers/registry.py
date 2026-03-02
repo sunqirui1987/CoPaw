@@ -13,34 +13,6 @@ from .models import CustomProviderData, ModelInfo, ProviderDefinition
 if TYPE_CHECKING:
     from .models import ProvidersData
 
-MODELSCOPE_MODELS: List[ModelInfo] = [
-    ModelInfo(
-        id="Qwen/Qwen3-235B-A22B-Instruct-2507",
-        name="Qwen3-235B-A22B-Instruct-2507",
-    ),
-    ModelInfo(id="deepseek-ai/DeepSeek-V3.2", name="DeepSeek-V3.2"),
-]
-
-DASHSCOPE_MODELS: List[ModelInfo] = [
-    ModelInfo(id="qwen3-max", name="Qwen3 Max"),
-    ModelInfo(
-        id="qwen3-235b-a22b-thinking-2507",
-        name="Qwen3 235B A22B Thinking",
-    ),
-    ModelInfo(id="deepseek-v3.2", name="DeepSeek-V3.2"),
-]
-
-ALIYUN_CODINGPLAN_MODELS: List[ModelInfo] = [
-    ModelInfo(id="qwen3.5-plus", name="Qwen3.5 Plus"),
-    ModelInfo(id="glm-5", name="GLM-5"),
-    ModelInfo(id="glm-4.7", name="GLM-4.7"),
-    ModelInfo(id="MiniMax-M2.5", name="MiniMax M2.5"),
-    ModelInfo(id="kimi-k2.5", name="Kimi K2.5"),
-    ModelInfo(id="qwen3-max-2026-01-23", name="Qwen3 Max 2026-01-23"),
-    ModelInfo(id="qwen3-coder-next", name="Qwen3 Coder Next"),
-    ModelInfo(id="qwen3-coder-plus", name="Qwen3 Coder Plus"),
-]
-
 QNAIGC_MODELS: List[ModelInfo] = [
     ModelInfo(id="qwen3-max", name="Qwen3 Max"),
     ModelInfo(
@@ -58,30 +30,6 @@ QNAIGC_MODELS: List[ModelInfo] = [
     ModelInfo(id="gemini-2.5-flash", name="Gemini 2.5 Flash"),
 ]
 
-PROVIDER_MODELSCOPE = ProviderDefinition(
-    id="modelscope",
-    name="ModelScope",
-    default_base_url="https://api-inference.modelscope.cn/v1",
-    api_key_prefix="ms",
-    models=MODELSCOPE_MODELS,
-)
-
-PROVIDER_DASHSCOPE = ProviderDefinition(
-    id="dashscope",
-    name="DashScope",
-    default_base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
-    api_key_prefix="sk",
-    models=DASHSCOPE_MODELS,
-)
-
-PROVIDER_ALIYUN_CODINGPLAN = ProviderDefinition(
-    id="aliyun-codingplan",
-    name="Aliyun Coding Plan",
-    default_base_url="https://coding.dashscope.aliyuncs.com/v1",
-    api_key_prefix="sk-sp",
-    models=ALIYUN_CODINGPLAN_MODELS,
-)
-
 PROVIDER_QNAIGC = ProviderDefinition(
     id="qnaigc",
     name="Qiniu MaaS (qnaigc)",
@@ -90,52 +38,10 @@ PROVIDER_QNAIGC = ProviderDefinition(
     models=QNAIGC_MODELS,
 )
 
-PROVIDER_LLAMACPP = ProviderDefinition(
-    id="llamacpp",
-    name="llama.cpp (Local)",
-    default_base_url="",
-    api_key_prefix="",
-    models=[],
-    is_local=True,
-)
-
-PROVIDER_MLX = ProviderDefinition(
-    id="mlx",
-    name="MLX (Local, Apple Silicon)",
-    default_base_url="",
-    api_key_prefix="",
-    models=[],
-    is_local=True,
-)
-
-PROVIDER_OLLAMA = ProviderDefinition(
-    id="ollama",
-    name="Ollama",
-    default_base_url="http://localhost:11434/v1",
-    api_key_prefix="",
-    models=[],
-)
-
-_BUILTIN_IDS: frozenset[str] = frozenset(
-    [
-        "modelscope",
-        "dashscope",
-        "aliyun-codingplan",
-        "qnaigc",
-        "ollama",
-        "llamacpp",
-        "mlx",
-    ],
-)
+_BUILTIN_IDS: frozenset[str] = frozenset(["qnaigc"])
 
 PROVIDERS: dict[str, ProviderDefinition] = {
-    PROVIDER_MODELSCOPE.id: PROVIDER_MODELSCOPE,
-    PROVIDER_DASHSCOPE.id: PROVIDER_DASHSCOPE,
-    PROVIDER_ALIYUN_CODINGPLAN.id: PROVIDER_ALIYUN_CODINGPLAN,
     PROVIDER_QNAIGC.id: PROVIDER_QNAIGC,
-    PROVIDER_OLLAMA.id: PROVIDER_OLLAMA,
-    PROVIDER_LLAMACPP.id: PROVIDER_LLAMACPP,
-    PROVIDER_MLX.id: PROVIDER_MLX,
 }
 
 _VALID_ID_RE = re.compile(r"^[a-z][a-z0-9_-]{0,63}$")
@@ -243,48 +149,13 @@ def sync_custom_providers(
 
 
 def sync_local_models() -> None:
-    """Refresh local provider model lists from the local models manifest."""
-    try:
-        from ..local_models.manager import list_local_models
-        from ..local_models.schema import BackendType
-
-        llamacpp_models: list[ModelInfo] = []
-        mlx_models: list[ModelInfo] = []
-
-        for model in list_local_models():
-            info = ModelInfo(id=model.id, name=model.display_name)
-            if model.backend == BackendType.LLAMACPP:
-                llamacpp_models.append(info)
-            elif model.backend == BackendType.MLX:
-                mlx_models.append(info)
-
-        PROVIDER_LLAMACPP.models = llamacpp_models
-        PROVIDER_MLX.models = mlx_models
-    except ImportError:
-        # local_models dependencies not installed; leave model lists empty
-        pass
+    """Refresh local provider model lists. No-op when only qnaigc is used."""
+    pass
 
 
 def sync_ollama_models() -> None:
-    """Refresh Ollama provider model list from the Ollama daemon.
-
-    Models are derived from ``ollama.list()`` via :class:`OllamaModelManager`.
-    If the SDK is not installed or the daemon is unavailable, the list is
-    left unchanged.
-    """
-    try:
-        from ..providers.ollama_manager import OllamaModelManager
-
-        models: list[ModelInfo] = []
-        for model in OllamaModelManager.list_models():
-            models.append(ModelInfo(id=model.name, name=model.name))
-        PROVIDER_OLLAMA.models = models
-    except ImportError:
-        # Ollama SDK not installed; treat as having no models
-        PROVIDER_OLLAMA.models = []
-    except Exception:
-        # Any other error (e.g. daemon not running) — keep previous list.
-        pass
+    """Refresh Ollama provider model list. No-op when only qnaigc is used."""
+    pass
 
 
 _CHAT_MODEL_MAP: dict[str, Type[ChatModelBase]] = {

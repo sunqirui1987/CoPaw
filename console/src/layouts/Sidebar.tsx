@@ -173,11 +173,16 @@ export default function Sidebar({
           gap: 8,
         }}
       >
-        <img
-          src="/logo.png"
-          alt="Aicraw"
-          style={{ height: 32, width: "auto" }}
-        />
+        <span
+          style={{
+            fontSize: 20,
+            fontWeight: 700,
+            color: "#4f46e5",
+            letterSpacing: "0.02em",
+          }}
+        >
+          LinCraw
+        </span>
         {!collapsed && version && (
           <span
             style={{

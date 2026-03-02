@@ -60,6 +60,13 @@ DASHSCOPE_BASE_URL = os.environ.get(
     "https://dashscope.aliyuncs.com/compatible-mode/v1",
 )
 
+# Console auth: when True, require Authorization: Bearer <apiKey> for /api/* (except /api/auth/login, /api/version).
+CONSOLE_REQUIRE_AUTH = os.environ.get("AICRAW_CONSOLE_REQUIRE_AUTH", "true").lower() in (
+    "true",
+    "1",
+    "yes",
+)
+
 # CORS configuration — comma-separated list of allowed origins for dev mode.
 # Example: AICRAW_CORS_ORIGINS="http://localhost:5173,http://127.0.0.1:5173"
 # When unset, CORS middleware is not applied.
