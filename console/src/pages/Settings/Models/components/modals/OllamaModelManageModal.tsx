@@ -235,7 +235,7 @@ export function OllamaModelManageModal({
             gap: 10,
           }}
         >
-          <LoadingOutlined spin style={{ fontSize: 16, color: "#615CED" }} />
+          <LoadingOutlined spin style={{ fontSize: 16, color: "#1a1a1a" }} />
           <span style={{ color: "#333", fontSize: 13, flex: 1 }}>
             {task.status === "pending"
               ? t("models.localDownloadPending")

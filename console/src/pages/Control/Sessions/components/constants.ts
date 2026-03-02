@@ -5,12 +5,12 @@ export interface Session extends ChatSpec {
 }
 
 export const CHANNEL_COLORS: Record<string, string> = {
-  imessage: "blue",
-  discord: "purple",
-  dingtalk: "cyan",
-  feishu: "magenta",
-  qq: "orange",
-  console: "green",
+  imessage: "default",
+  discord: "default",
+  dingtalk: "default",
+  feishu: "default",
+  qq: "default",
+  console: "default",
 } as const;
 
 export const formatTime = (timestamp: string | number | null): string => {

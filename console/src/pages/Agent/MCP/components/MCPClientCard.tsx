@@ -90,7 +90,7 @@ export function MCPClientCard({
         <div className={styles.cardHeader}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span className={styles.fileIcon}>
-              <Server style={{ color: "#1890ff", fontSize: 20 }} />
+              <Server style={{ color: "#1a1a1a", fontSize: 20 }} />
             </span>
             <h3 className={styles.mcpTitle}>{client.name}</h3>
             <span

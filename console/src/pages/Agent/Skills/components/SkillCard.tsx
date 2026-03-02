@@ -27,35 +27,36 @@ interface SkillCardProps {
 const getFileIcon = (filePath: string) => {
   const extension = filePath.split(".").pop()?.toLowerCase() || "";
 
+  const iconColor = "#595959";
   switch (extension) {
     case "txt":
     case "md":
     case "markdown":
-      return <FileTextFilled style={{ color: "#1890ff" }} />;
+      return <FileTextFilled style={{ color: iconColor }} />;
     case "zip":
     case "rar":
     case "7z":
     case "tar":
     case "gz":
-      return <FileZipFilled style={{ color: "#fa8c16" }} />;
+      return <FileZipFilled style={{ color: iconColor }} />;
     case "pdf":
-      return <FilePdfFilled style={{ color: "#f5222d" }} />;
+      return <FilePdfFilled style={{ color: iconColor }} />;
     case "doc":
     case "docx":
-      return <FileWordFilled style={{ color: "#2b579a" }} />;
+      return <FileWordFilled style={{ color: iconColor }} />;
     case "xls":
     case "xlsx":
-      return <FileExcelFilled style={{ color: "#217346" }} />;
+      return <FileExcelFilled style={{ color: iconColor }} />;
     case "ppt":
     case "pptx":
-      return <FilePptFilled style={{ color: "#d24726" }} />;
+      return <FilePptFilled style={{ color: iconColor }} />;
     case "jpg":
     case "jpeg":
     case "png":
     case "gif":
     case "svg":
     case "webp":
-      return <FileImageFilled style={{ color: "#eb2f96" }} />;
+      return <FileImageFilled style={{ color: iconColor }} />;
     case "py":
     case "js":
     case "ts":
@@ -68,9 +69,9 @@ const getFileIcon = (filePath: string) => {
     case "rs":
     case "rb":
     case "php":
-      return <CodeFilled style={{ color: "#52c41a" }} />;
+      return <CodeFilled style={{ color: iconColor }} />;
     default:
-      return <FileTextFilled style={{ color: "#1890ff" }} />;
+      return <FileTextFilled style={{ color: iconColor }} />;
   }
 };
 

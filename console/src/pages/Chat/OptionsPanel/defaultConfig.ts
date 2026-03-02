@@ -1,6 +1,6 @@
 const defaultConfig = {
   theme: {
-    colorPrimary: "#6366f1",
+    colorPrimary: "#1a1a1a",
     darkMode: false,
     prefix: "aicraw",
     leftHeader: {

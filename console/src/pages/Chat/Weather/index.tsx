@@ -16,7 +16,7 @@ const useStyles = createStyles(({ css }) => ({
     width: 100%;
     max-width: 320px;
     border-radius: 20px;
-    background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+    background: linear-gradient(135deg, #4a4a4a 0%, #1a1a1a 100%);
     color: white;
     overflow: hidden;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);

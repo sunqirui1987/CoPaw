@@ -4,7 +4,7 @@ body {
   overflow: hidden;
   margin: 0;
   padding: 0;
-  background: #f5f6f8;
+  background: #f5f5f5;
 }
 
 #root {
@@ -16,12 +16,12 @@ body {
   min-height: 100vh;
   max-height: 100vh;
   overflow: hidden;
-  background: #f5f6f8;
+  background: #f5f5f5;
 }
 
 .ant-layout-content {
   overflow: hidden;
-  background: #f5f6f8;
+  background: #f5f5f5;
 }
 
 .page-container {
@@ -50,18 +50,18 @@ body {
 
 .page-content::-webkit-scrollbar-track,
 .table-wrapper::-webkit-scrollbar-track {
-  background: #e8eaed;
+  background: #e8e8e8;
 }
 
 .page-content::-webkit-scrollbar-thumb,
 .table-wrapper::-webkit-scrollbar-thumb {
-  background: #b8bcc4;
+  background: #bfbfbf;
   border-radius: 4px;
 }
 
 .page-content::-webkit-scrollbar-thumb:hover,
 .table-wrapper::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  background: #8c8c8c;
 }
 
 .table-container {
